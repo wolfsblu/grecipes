@@ -3,10 +3,17 @@
     {{ block "title" .}}
     <title>Recipe Manager</title>
     {{ end }}
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.3/dist/htmx.min.js" integrity="sha256-SRlVzRgQdH19e5zLk2QAr7dg4G0l1T5FcrZLZWOyeE4=" crossorigin="anonymous"></script>
 </head>
 <body>
+<div class="flex items-center bg-slate-200 p-3 gap-x-3">
+    <div class="block rounded-full p-2 bg-slate-100">
+        <img class="w-8" src="assets/images/logo.svg" alt="Logo">
+    </div>
+    <h1 class="text-2xl font-light">Recipes</h1>
+</div>
 {{ block  "content" .}}
 {{ end }}
 </body>
