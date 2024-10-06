@@ -1,3 +1,11 @@
 {{ define "content"}}
 <p>Hello, World!</p>
+
+{{ block "recipe-list" . }}
+<ul hx-get="/recipes/" hx-trigger="load">
+    {{ range .Recipes }}
+        <li>{{ .Name }}</li>
+    {{ end }}
+</ul>
+{{ end }}
 {{ end }}

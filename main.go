@@ -10,6 +10,7 @@ func main() {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/assets/", routes.Assets)
+	mux.HandleFunc("/recipes/", routes.GetRecipes)
 	mux.HandleFunc("/{$}", routes.Index)
 
 	err := http.ListenAndServe(":8080", mux)
