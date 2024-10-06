@@ -2,14 +2,14 @@ package db
 
 import (
 	"database/sql"
-	_ "github.com/mattn/go-sqlite3"
 	"log"
+	_ "modernc.org/sqlite"
 )
 
 var Query *Queries
 
 func init() {
-	con, err := sql.Open("sqlite3", "tmp/db.sqlite")
+	con, err := sql.Open("sqlite", "tmp/db.sqlite")
 	if err != nil {
 		log.Fatalln("failed to open db:", err)
 	}
