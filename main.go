@@ -10,9 +10,9 @@ func main() {
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/assets/", routes.Assets)
-	mux.HandleFunc("/", routes.Index)
+	mux.HandleFunc("/{$}", routes.Index)
 
-	err := http.ListenAndServe("127.0.0.1:8080", mux)
+	err := http.ListenAndServe(":8080", mux)
 	if err != nil {
 		log.Fatalln("failed to start server:", err)
 	}
