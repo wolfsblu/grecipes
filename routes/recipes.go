@@ -3,13 +3,14 @@ package routes
 import (
 	"context"
 	"github.com/wolfsblu/grecipes/db"
-	"github.com/wolfsblu/grecipes/templates"
+	"github.com/wolfsblu/grecipes/templates/components"
+	"github.com/wolfsblu/grecipes/templates/pages"
 	"log"
 	"net/http"
 )
 
 func CreateRecipe(w http.ResponseWriter, _ *http.Request) {
-	c := templates.Create()
+	c := pages.Create()
 	_ = c.Render(context.Background(), w)
 }
 
@@ -19,6 +20,6 @@ func GetRecipes(w http.ResponseWriter, _ *http.Request) {
 		log.Println("failed to load recipes:", err)
 		w.WriteHeader(http.StatusInternalServerError)
 	}
-	c := templates.RecipeList(recipes)
+	c := components.RecipeList(recipes)
 	_ = c.Render(context.Background(), w)
 }

@@ -3,8 +3,8 @@ package db
 import (
 	"database/sql"
 	"log"
-	"os"
 	_ "modernc.org/sqlite"
+	"os"
 )
 
 var Query *Queries
