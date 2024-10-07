@@ -5,7 +5,7 @@ tmp_dir = "tmp"
 [build]
   args_bin = []
   full_bin = "DB_PATH=tmp/db.sqlite ./tmp/main"
-  cmd = "templ generate && go build -o ./tmp/main ."
+  cmd = "npx tailwindcss -i templates/public/css/app.css -o templates/public/dist/app.min.css -m && templ generate && go build -o ./tmp/main ."
   delay = 1000
   exclude_dir = ["assets", "tmp", "vendor", "testdata"]
   exclude_file = []
