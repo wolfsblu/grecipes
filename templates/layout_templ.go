@@ -29,7 +29,7 @@ func Layout() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<html lang=\"en\"><head><title>Recipe Manager</title><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><script src=\"https://cdn.tailwindcss.com\"></script><link rel=\"stylesheet\" href=\"/public/dist/app.min.css\"><script src=\"https://cdn.jsdelivr.net/npm/htmx.org@2.0.3/dist/htmx.min.js\" integrity=\"sha256-SRlVzRgQdH19e5zLk2QAr7dg4G0l1T5FcrZLZWOyeE4=\" crossorigin=\"anonymous\"></script></head><body>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<html lang=\"en\"><head><title>Recipe Manager</title><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><link rel=\"stylesheet\" href=\"/public/dist/app.min.css\"><script src=\"/public/dist/htmx.min.js\" type=\"text/javascript\"></script></head><body>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
