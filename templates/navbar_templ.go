@@ -29,7 +29,7 @@ func Navbar() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"flex items-center justify-between bg-slate-300 px-3 py-2\"><a class=\"flex items-center gap-x-3\" href=\"/\"><div class=\"block rounded-full p-2 bg-slate-100\"><img class=\"w-8\" src=\"public/images/logo.svg\" alt=\"Logo\"></div><h1 class=\"text-2xl font-light\">Recipes</h1></a> <a class=\"flex items-center rounded-full sm:rounded p-2 bg-slate-100 gap-x-2\" href=\"/recipes/create/\"><img class=\"w-5 h-5\" src=\"public/icons/plus.svg\" alt=\"Plus\"> <span class=\"hidden sm:inline\">New Recipe</span></a></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"flex items-center justify-between bg-slate-300 px-3 py-2\"><a class=\"flex items-center gap-x-3\" href=\"/\"><div class=\"block rounded-full p-2 bg-slate-100\"><img class=\"w-8\" src=\"/public/images/logo.svg\" alt=\"Logo\"></div><h1 class=\"text-2xl font-light\">Recipes</h1></a> <a class=\"flex items-center rounded-full sm:rounded p-2 bg-slate-100 gap-x-2\" href=\"/recipes/create/\"><img class=\"w-5 h-5\" src=\"/public/icons/plus.svg\" alt=\"Plus\"> <span class=\"hidden sm:inline\">New Recipe</span></a></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
