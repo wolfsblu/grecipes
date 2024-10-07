@@ -1,0 +1,13 @@
+package templates
+
+import (
+	"github.com/wolfsblu/grecipes/db"
+)
+
+templ RecipeList(recipes []db.Recipe) {
+    <ul>
+        for _, item := range recipes {
+            <li>{ item.Name }</li>
+        }
+    </ul>
+}

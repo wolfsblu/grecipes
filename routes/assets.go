@@ -6,6 +6,6 @@ import (
 )
 
 func Assets(w http.ResponseWriter, r *http.Request) {
-	h := http.FileServer(http.FS(templates.AssetsFS))
+	h := http.FileServer(http.FS(templates.PublicFS))
 	h.ServeHTTP(w, r)
 }
