@@ -1,14 +1,16 @@
 CREATE TABLE recipes
 (
     id          INTEGER PRIMARY KEY,
-    name        TEXT    NOT NULL,
-    servings    INTEGER NOT NULL,
-    description TEXT    NOT NULL
+    name        TEXT NOT NULL,
+    servings    INTEGER NULL,
+    minutes     INTEGER NULL,
+    description TEXT NULL
 );
 
 CREATE TABLE units
 (
     id   INTEGER PRIMARY KEY,
+    code TEXT NULL,
     name TEXT NOT NULL
 );
 
