@@ -1,12 +1,12 @@
 package routes
 
 import (
-	"context"
-	"github.com/wolfsblu/grecipes/templates/pages"
+	"github.com/wolfsblu/grecipes/app"
+	"io/fs"
 	"net/http"
 )
 
-func Index(w http.ResponseWriter, _ *http.Request) {
-	c := pages.Index()
-	_ = c.Render(context.Background(), w)
+func Index(w http.ResponseWriter, r *http.Request) {
+	sub, _ := fs.Sub(app.DistFS, "dist")
+	http.ServeFileFS(w, r, sub, "index.html")
 }
