@@ -30,14 +30,24 @@ func (p *RecipesService) DeleteRecipe(ctx context.Context, params api.DeleteReci
 	return nil
 }
 
-func (p *RecipesService) GetRecipeById(ctx context.Context, params api.GetRecipeByIdParams) (api.GetRecipeByIdRes, error) {
+func (p *RecipesService) GetRecipes(ctx context.Context) ([]api.Recipe, error) {
+	p.mux.Lock()
+	defer p.mux.Unlock()
+
+	var recipes []api.Recipe
+	for _, recipe := range p.Recipes {
+		recipes = append(recipes, recipe)
+	}
+	return recipes, nil
+}
+
+func (p *RecipesService) GetRecipeById(ctx context.Context, params api.GetRecipeByIdParams) (*api.Recipe, error) {
 	p.mux.Lock()
 	defer p.mux.Unlock()
 
 	Recipe, ok := p.Recipes[params.RecipeId]
 	if !ok {
-		// Return Not Found.
-		return &api.GetRecipeByIdNotFound{}, nil
+		return &api.Recipe{}, ErrRecipeNotFound
 	}
 	return &Recipe, nil
 }

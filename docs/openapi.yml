@@ -9,7 +9,27 @@ tags:
   - name: Recipe
     description: Everything about your recipes
 paths:
-  /recipe:
+  /recipes:
+    get:
+      tags:
+        - Recipe
+      summary: Get all recipes
+      operationId: getRecipes
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Recipe'
+        default:
+          description: Something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     post:
       tags:
         - Recipe
@@ -22,6 +42,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Recipe'
+        default:
+          description: Something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
       requestBody:
         description: Create a new recipe in the store
         required: true
@@ -29,7 +55,7 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Recipe'
-  '/recipe/{recipeId}':
+  '/recipes/{recipeId}':
     get:
       tags:
         - Recipe
@@ -51,8 +77,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Recipe'
-        '404':
-          description: Recipe not found
+        default:
+          description: Something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     post:
       tags:
         - Recipe
@@ -80,6 +110,12 @@ paths:
       responses:
         '200':
           description: successful operation
+        default:
+          description: Something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     delete:
       tags:
         - Recipe
@@ -97,8 +133,27 @@ paths:
       responses:
         '200':
           description: successful operation
+        default:
+          description: Something went wrong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
+    Error:
+      type: object
+      description: Represents an error
+      properties:
+        code:
+          type: integer
+          examples:
+            - 1
+        message:
+          type: string
+      required:
+        - code
+        - message
     RecipeStatus:
       type: string
       description: Recipe status in the store
@@ -113,10 +168,12 @@ components:
         id:
           type: integer
           format: int64
-          example: 10
+          examples:
+            - 10
         name:
           type: string
-          example: Spaghetti Carbonara
+          examples:
+            - Spaghetti Carbonara
         photoUrls:
           type: array
           items:
