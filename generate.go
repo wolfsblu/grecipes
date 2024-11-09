@@ -1,3 +1,3 @@
 package main
 
-//go:generate go run github.com/ogen-go/ogen/cmd/ogen@latest --target api --clean docs/petstore.yml
+//go:generate go run github.com/ogen-go/ogen/cmd/ogen@latest --target api --clean docs/openapi.yml

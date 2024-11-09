@@ -2,5 +2,5 @@ package docs
 
 import "embed"
 
-//go:embed petstore.yml
+//go:embed openapi.yml
 var APIDocsFS embed.FS

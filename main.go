@@ -10,16 +10,16 @@ import (
 )
 
 func main() {
-	petsService := &service.PetsService{
-		Pets: map[int64]api.Pet{},
+	svc := &service.RecipesService{
+		Recipes: map[int64]api.Recipe{},
 	}
-	handler, err := api.NewServer(petsService)
+	handler, err := api.NewServer(svc)
 	if err != nil {
 		log.Fatalln("failed to start API server:", err)
 	}
 
 	mux := http.NewServeMux()
-	mux.Handle("/api/docs/", v5emb.New("Petstore", "/api/api.yml", "/api/docs/"))
+	mux.Handle("/api/docs/", v5emb.New("OpenAPI Docs", "/api/openapi.yml", "/api/docs/"))
 	mux.Handle("/api/", http.StripPrefix("/api", handler))
 	routes.Register(mux)
 
