@@ -11,9 +11,9 @@
         <h1 class="text-2xl text-alice font-light">Recipes</h1>
     </a>
 
-    <a class="bg-dogwood flex items-center rounded-full sm:rounded-lg p-3 gap-x-2" href="/recipes/create/">
-        <span class="h-4 w-4 sm:hidden">
-            <Plus/>
+    <a class="bg-dogwood flex items-center rounded-full sm:rounded-lg p-2 gap-x-2" href="/recipes/create/">
+        <span class="h-7 w-7 sm:hidden text-blue-600">
+            <Plus />
         </span>
         <span class="hidden sm:inline">New Recipe</span>
     </a>

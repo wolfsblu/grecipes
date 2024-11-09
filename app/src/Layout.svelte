@@ -2,7 +2,7 @@
     import type {Snippet} from "svelte";
 
     interface Props {
-        header?: Snippet
+        header?: Snippet,
         children: Snippet
     }
 
