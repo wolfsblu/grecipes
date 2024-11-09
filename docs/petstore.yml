@@ -1,9 +1,9 @@
 openapi: 3.0.2
 servers:
-  - url: /v3
+  - url: /api
 info:
   version: 1.0.0
-  title: Pet store schema
+  title: Petstore
 tags:
   - name: pet
     description: Everything about your Pets

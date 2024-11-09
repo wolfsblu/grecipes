@@ -4,16 +4,16 @@ import (
 	"context"
 	"sync"
 
-	petstore "github.com/wolfsblu/grecipes/api"
+	"github.com/wolfsblu/grecipes/api"
 )
 
 type PetsService struct {
-	Pets map[int64]petstore.Pet
+	Pets map[int64]api.Pet
 	id   int64
 	mux  sync.Mutex
 }
 
-func (p *PetsService) AddPet(ctx context.Context, req *petstore.Pet) (*petstore.Pet, error) {
+func (p *PetsService) AddPet(ctx context.Context, req *api.Pet) (*api.Pet, error) {
 	p.mux.Lock()
 	defer p.mux.Unlock()
 
@@ -22,7 +22,7 @@ func (p *PetsService) AddPet(ctx context.Context, req *petstore.Pet) (*petstore.
 	return req, nil
 }
 
-func (p *PetsService) DeletePet(ctx context.Context, params petstore.DeletePetParams) error {
+func (p *PetsService) DeletePet(ctx context.Context, params api.DeletePetParams) error {
 	p.mux.Lock()
 	defer p.mux.Unlock()
 
@@ -30,19 +30,19 @@ func (p *PetsService) DeletePet(ctx context.Context, params petstore.DeletePetPa
 	return nil
 }
 
-func (p *PetsService) GetPetById(ctx context.Context, params petstore.GetPetByIdParams) (petstore.GetPetByIdRes, error) {
+func (p *PetsService) GetPetById(ctx context.Context, params api.GetPetByIdParams) (api.GetPetByIdRes, error) {
 	p.mux.Lock()
 	defer p.mux.Unlock()
 
 	pet, ok := p.Pets[params.PetId]
 	if !ok {
 		// Return Not Found.
-		return &petstore.GetPetByIdNotFound{}, nil
+		return &api.GetPetByIdNotFound{}, nil
 	}
 	return &pet, nil
 }
 
-func (p *PetsService) UpdatePet(ctx context.Context, params petstore.UpdatePetParams) error {
+func (p *PetsService) UpdatePet(ctx context.Context, params api.UpdatePetParams) error {
 	p.mux.Lock()
 	defer p.mux.Unlock()
 
