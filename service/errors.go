@@ -23,17 +23,17 @@ var (
 )
 
 func (p *RecipesService) NewError(ctx context.Context, err error) (r *api.ErrorStatusCode) {
-	var serr RecipeServiceError
-	ok := errors.As(err, &serr)
+	var serviceError RecipeServiceError
+	ok := errors.As(err, &serviceError)
 	if !ok {
-		serr = ErrUnhandled
+		serviceError = ErrUnhandled
 	}
 
 	return &api.ErrorStatusCode{
-		StatusCode: serr.HttpStatusCode,
+		StatusCode: serviceError.HttpStatusCode,
 		Response: api.Error{
-			Code:    serr.ErrorCode,
-			Message: serr.ErrorMessage,
+			Code:    serviceError.ErrorCode,
+			Message: serviceError.ErrorMessage,
 		},
 	}
 }
