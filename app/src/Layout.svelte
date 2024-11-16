@@ -1,13 +1,15 @@
 <script lang="ts">
-    import type {Snippet} from "svelte";
+    import type {Component, Snippet} from "svelte";
 
     interface Props {
-        header?: Snippet,
+        Header?: Component,
         children: Snippet
     }
 
-    let { header, children }: Props = $props()
+    let { Header, children }: Props = $props()
 </script>
 
-{@render header?.()}
-{@render children()}
+<Header />
+<main>
+    {@render children()}
+</main>
