@@ -4,7 +4,7 @@ tmp_dir = "tmp"
 
 [build]
   args_bin = []
-  full_bin = "DB_PATH=tmp/db.sqlite ./tmp/main"
+  bin = "tmp/main"
   cmd = "npm --prefix app run build && go build -o ./tmp/main ."
   delay = 1000
   exclude_dir = ["assets", "tmp", "vendor", "testdata", "app/dist"]

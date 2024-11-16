@@ -12,10 +12,7 @@ import (
 )
 
 func main() {
-	dbPath, ok := os.LookupEnv("DB_PATH")
-	if !ok {
-		log.Fatalln("env variable DB_PATH needs to point to a sqlite database path")
-	}
+	dbPath := getEnv("DB_PATH", "tmp/db.sqlite")
 	query, err := db.Connect(dbPath)
 	if err != nil {
 		log.Fatalln("could not connect to database", err)
@@ -33,8 +30,17 @@ func main() {
 	mux.Handle("/api/", http.StripPrefix("/api", handler))
 	routes.Register(mux)
 
-	err = http.ListenAndServe(":8080", mux)
+	host := getEnv("HOST", "127.0.0.1:8080")
+	err = http.ListenAndServe(host, mux)
 	if err != nil {
 		log.Fatalln("failed to start server:", err)
 	}
+}
+
+func getEnv(key, fallback string) string {
+	value, ok := os.LookupEnv(key)
+	if !ok {
+		value = fallback
+	}
+	return value
 }
