@@ -20,7 +20,7 @@ paths:
           description: Successful operation
           $ref: '#/components/responses/RecipeList'
         default:
-          $ref: '#/components/responses/DefaultError'
+          $ref: '#/components/responses/Error'
     post:
       tags:
         - Recipe
@@ -31,7 +31,7 @@ paths:
           description: Successful operation
           $ref: '#/components/responses/Recipe'
         default:
-          $ref: '#/components/responses/DefaultError'
+          $ref: '#/components/responses/Error'
       requestBody:
         description: Create a new recipe in the store
         $ref: '#/components/requestBodies/Recipe'
@@ -55,7 +55,7 @@ paths:
           description: successful operation
           $ref: '#/components/responses/Recipe'
         default:
-          $ref: '#/components/responses/DefaultError'
+          $ref: '#/components/responses/Error'
     post:
       tags:
         - Recipe
@@ -77,7 +77,7 @@ paths:
           description: successful operation
           $ref: '#/components/responses/Recipe'
         default:
-          $ref: '#/components/responses/DefaultError'
+          $ref: '#/components/responses/Error'
     delete:
       tags:
         - Recipe
@@ -96,7 +96,7 @@ paths:
         '200':
           description: successful operation
         default:
-          $ref: '#/components/responses/DefaultError'
+          $ref: '#/components/responses/Error'
 components:
   schemas:
     Error:
@@ -149,7 +149,7 @@ components:
           schema:
             $ref: '#/components/schemas/WriteRecipe'
   responses:
-    DefaultError:
+    Error:
       description: Something went wrong
       content:
         application/json:
