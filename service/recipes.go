@@ -6,10 +6,12 @@ import (
 	"github.com/wolfsblu/grecipes/db"
 )
 
-type RecipesService struct{}
+type RecipesService struct {
+	Db *db.Queries
+}
 
 func (p *RecipesService) AddRecipe(ctx context.Context, req *api.WriteRecipe) (*api.ReadRecipe, error) {
-	recipe, err := db.Query.CreateRecipe(ctx, req.Name)
+	recipe, err := p.Db.CreateRecipe(ctx, req.Name)
 	if err != nil {
 		return nil, err
 	}
@@ -20,7 +22,7 @@ func (p *RecipesService) AddRecipe(ctx context.Context, req *api.WriteRecipe) (*
 }
 
 func (p *RecipesService) DeleteRecipe(ctx context.Context, params api.DeleteRecipeParams) error {
-	err := db.Query.DeleteRecipe(ctx, params.RecipeId)
+	err := p.Db.DeleteRecipe(ctx, params.RecipeId)
 	if err != nil {
 		return err
 	}
@@ -28,7 +30,7 @@ func (p *RecipesService) DeleteRecipe(ctx context.Context, params api.DeleteReci
 }
 
 func (p *RecipesService) GetRecipes(ctx context.Context) ([]api.ReadRecipe, error) {
-	recipes, err := db.Query.ListRecipes(ctx)
+	recipes, err := p.Db.ListRecipes(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -43,7 +45,7 @@ func (p *RecipesService) GetRecipes(ctx context.Context) ([]api.ReadRecipe, erro
 }
 
 func (p *RecipesService) GetRecipeById(ctx context.Context, params api.GetRecipeByIdParams) (*api.ReadRecipe, error) {
-	recipe, err := db.Query.GetRecipe(ctx, params.RecipeId)
+	recipe, err := p.Db.GetRecipe(ctx, params.RecipeId)
 	if err != nil {
 		return nil, ErrRecipeNotFound
 	}
