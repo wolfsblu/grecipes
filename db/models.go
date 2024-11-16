@@ -4,7 +4,24 @@
 
 package db
 
+type Ingredient struct {
+	ID       int64
+	RecipeID int64
+	UnitID   int64
+	Name     string
+	Amount   float64
+}
+
 type Recipe struct {
-	ID   interface{}
+	ID          int64
+	Name        string
+	Servings    interface{}
+	Minutes     interface{}
+	Description interface{}
+}
+
+type Unit struct {
+	ID   int64
+	Code interface{}
 	Name string
 }

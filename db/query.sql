@@ -9,7 +9,7 @@ SELECT *
 FROM recipes
 ORDER BY name;
 
--- name: CreateAuthor :one
+-- name: CreateRecipe :one
 INSERT INTO recipes (name)
 VALUES (?)
 RETURNING *;

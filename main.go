@@ -10,9 +10,7 @@ import (
 )
 
 func main() {
-	svc := &service.RecipesService{
-		Recipes: map[int64]api.Recipe{},
-	}
+	svc := &service.RecipesService{}
 	handler, err := api.NewServer(svc)
 	if err != nil {
 		log.Fatalln("failed to start API server:", err)

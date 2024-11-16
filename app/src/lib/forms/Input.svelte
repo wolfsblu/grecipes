@@ -3,7 +3,6 @@
 
     interface Props {
         label?: string
-        name: string
         type: HTMLInputTypeAttribute | null | undefined
         value: T
     }

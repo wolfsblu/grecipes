@@ -22,14 +22,14 @@ var (
 	ErrRecipeNotFound = RecipeServiceError{HttpStatusCode: 404, ErrorCode: 2, ErrorMessage: "recipe not found"}
 )
 
-func (p *RecipesService) NewError(ctx context.Context, err error) (r *api.ErrorStatusCode) {
+func (p *RecipesService) NewError(ctx context.Context, err error) (r *api.DefaultErrorStatusCode) {
 	var serviceError RecipeServiceError
 	ok := errors.As(err, &serviceError)
 	if !ok {
 		serviceError = ErrUnhandled
 	}
 
-	return &api.ErrorStatusCode{
+	return &api.DefaultErrorStatusCode{
 		StatusCode: serviceError.HttpStatusCode,
 		Response: api.Error{
 			Code:    serviceError.ErrorCode,

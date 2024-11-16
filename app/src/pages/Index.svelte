@@ -1,9 +1,8 @@
 <script lang="ts">
     import Layout from "../Layout.svelte";
     import Navbar from "../lib/components/Navbar.svelte";
-    import client from "../lib/api/client";
+    import {fetchRecipes} from "../lib/api/client";
 
-    const fetchRecipes = async () => await client.GET("/recipes")
     let recipeResult = fetchRecipes()
 </script>
 

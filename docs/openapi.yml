@@ -18,18 +18,9 @@ paths:
       responses:
         '200':
           description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Recipe'
+          $ref: '#/components/responses/RecipeList'
         default:
-          description: Something went wrong
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+          $ref: '#/components/responses/DefaultError'
     post:
       tags:
         - Recipe
@@ -38,23 +29,12 @@ paths:
       responses:
         '200':
           description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Recipe'
+          $ref: '#/components/responses/Recipe'
         default:
-          description: Something went wrong
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+          $ref: '#/components/responses/DefaultError'
       requestBody:
         description: Create a new recipe in the store
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Recipe'
+        $ref: '#/components/requestBodies/Recipe'
   '/recipes/{recipeId}':
     get:
       tags:
@@ -73,16 +53,9 @@ paths:
       responses:
         '200':
           description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Recipe'
+          $ref: '#/components/responses/Recipe'
         default:
-          description: Something went wrong
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+          $ref: '#/components/responses/DefaultError'
     post:
       tags:
         - Recipe
@@ -92,30 +65,19 @@ paths:
       parameters:
         - name: recipeId
           in: path
-          description: ID of the recipe that needs to be updated
+          description: ID of the recipe to update
           required: true
           schema:
             type: integer
             format: int64
-        - name: name
-          in: query
-          description: Name of the recipe that needs to be updated
-          schema:
-            type: string
-        - name: status
-          in: query
-          description: Status of the recipe that needs to be updated
-          schema:
-            $ref: '#/components/schemas/RecipeStatus'
+      requestBody:
+        $ref: '#/components/requestBodies/Recipe'
       responses:
         '200':
           description: successful operation
+          $ref: '#/components/responses/Recipe'
         default:
-          description: Something went wrong
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+          $ref: '#/components/responses/DefaultError'
     delete:
       tags:
         - Recipe
@@ -134,11 +96,7 @@ paths:
         '200':
           description: successful operation
         default:
-          description: Something went wrong
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+          $ref: '#/components/responses/DefaultError'
 components:
   schemas:
     Error:
@@ -161,30 +119,53 @@ components:
         - available
         - pending
         - sold
-    Recipe:
+    WriteRecipe:
+      type: object
       required:
         - name
       properties:
-        id:
-          type: integer
-          format: int64
-          examples:
-            - 10
         name:
           type: string
           examples:
             - Spaghetti Carbonara
-        photoUrls:
-          type: array
-          items:
-            type: string
-        status:
-          $ref: '#/components/schemas/RecipeStatus'
-      type: object
+    ReadRecipe:
+      allOf:
+        - $ref: '#/components/schemas/WriteRecipe'
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              type: integer
+              format: int64
+              examples:
+                - 10
   requestBodies:
     Recipe:
+      description: Recipe object that needs to be added to the store
+      required: true
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Recipe'
-      description: Recipe object that needs to be added to the store
+            $ref: '#/components/schemas/WriteRecipe'
+  responses:
+    DefaultError:
+      description: Something went wrong
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RecipeList:
+      description: Recipe object returned as result
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/ReadRecipe'
+    Recipe:
+      description: Recipe object returned as result
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ReadRecipe'

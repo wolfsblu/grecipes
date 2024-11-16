@@ -9,16 +9,22 @@ import (
 	"context"
 )
 
-const createAuthor = `-- name: CreateAuthor :one
+const createRecipe = `-- name: CreateRecipe :one
 INSERT INTO recipes (name)
 VALUES (?)
-RETURNING id, name
+RETURNING id, name, servings, minutes, description
 `
 
-func (q *Queries) CreateAuthor(ctx context.Context, name string) (Recipe, error) {
-	row := q.db.QueryRowContext(ctx, createAuthor, name)
+func (q *Queries) CreateRecipe(ctx context.Context, name string) (Recipe, error) {
+	row := q.db.QueryRowContext(ctx, createRecipe, name)
 	var i Recipe
-	err := row.Scan(&i.ID, &i.Name)
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Servings,
+		&i.Minutes,
+		&i.Description,
+	)
 	return i, err
 }
 
@@ -28,27 +34,33 @@ FROM recipes
 WHERE id = ?
 `
 
-func (q *Queries) DeleteRecipe(ctx context.Context, id interface{}) error {
+func (q *Queries) DeleteRecipe(ctx context.Context, id int64) error {
 	_, err := q.db.ExecContext(ctx, deleteRecipe, id)
 	return err
 }
 
 const getRecipe = `-- name: GetRecipe :one
-SELECT id, name
+SELECT id, name, servings, minutes, description
 FROM recipes
 WHERE id = ?
 LIMIT 1
 `
 
-func (q *Queries) GetRecipe(ctx context.Context, id interface{}) (Recipe, error) {
+func (q *Queries) GetRecipe(ctx context.Context, id int64) (Recipe, error) {
 	row := q.db.QueryRowContext(ctx, getRecipe, id)
 	var i Recipe
-	err := row.Scan(&i.ID, &i.Name)
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Servings,
+		&i.Minutes,
+		&i.Description,
+	)
 	return i, err
 }
 
 const listRecipes = `-- name: ListRecipes :many
-SELECT id, name
+SELECT id, name, servings, minutes, description
 FROM recipes
 ORDER BY name
 `
@@ -62,7 +74,13 @@ func (q *Queries) ListRecipes(ctx context.Context) ([]Recipe, error) {
 	var items []Recipe
 	for rows.Next() {
 		var i Recipe
-		if err := rows.Scan(&i.ID, &i.Name); err != nil {
+		if err := rows.Scan(
+			&i.ID,
+			&i.Name,
+			&i.Servings,
+			&i.Minutes,
+			&i.Description,
+		); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
@@ -80,12 +98,12 @@ const updateRecipe = `-- name: UpdateRecipe :exec
 UPDATE recipes
 set name = ?
 WHERE id = ?
-RETURNING id, name
+RETURNING id, name, servings, minutes, description
 `
 
 type UpdateRecipeParams struct {
 	Name string
-	ID   interface{}
+	ID   int64
 }
 
 func (q *Queries) UpdateRecipe(ctx context.Context, arg UpdateRecipeParams) error {

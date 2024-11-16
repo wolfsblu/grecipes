@@ -2,66 +2,58 @@ package service
 
 import (
 	"context"
-	"sync"
-
 	"github.com/wolfsblu/grecipes/api"
+	"github.com/wolfsblu/grecipes/db"
 )
 
-type RecipesService struct {
-	Recipes map[int64]api.Recipe
-	id      int64
-	mux     sync.Mutex
-}
+type RecipesService struct{}
 
-func (p *RecipesService) AddRecipe(ctx context.Context, req *api.Recipe) (*api.Recipe, error) {
-	p.mux.Lock()
-	defer p.mux.Unlock()
-
-	p.Recipes[p.id] = *req
-	p.id++
-	return req, nil
+func (p *RecipesService) AddRecipe(ctx context.Context, req *api.WriteRecipe) (*api.ReadRecipe, error) {
+	recipe, err := db.Query.CreateRecipe(ctx, req.Name)
+	if err != nil {
+		return nil, err
+	}
+	return &api.ReadRecipe{
+		ID:   recipe.ID,
+		Name: recipe.Name,
+	}, nil
 }
 
 func (p *RecipesService) DeleteRecipe(ctx context.Context, params api.DeleteRecipeParams) error {
-	p.mux.Lock()
-	defer p.mux.Unlock()
-
-	delete(p.Recipes, params.RecipeId)
+	err := db.Query.DeleteRecipe(ctx, params.RecipeId)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
-func (p *RecipesService) GetRecipes(ctx context.Context) ([]api.Recipe, error) {
-	p.mux.Lock()
-	defer p.mux.Unlock()
-
-	var recipes []api.Recipe
-	for _, recipe := range p.Recipes {
-		recipes = append(recipes, recipe)
+func (p *RecipesService) GetRecipes(ctx context.Context) ([]api.ReadRecipe, error) {
+	recipes, err := db.Query.ListRecipes(ctx)
+	if err != nil {
+		return nil, err
 	}
-	return recipes, nil
+	var response []api.ReadRecipe
+	for _, recipe := range recipes {
+		response = append(response, api.ReadRecipe{
+			ID:   recipe.ID,
+			Name: recipe.Name,
+		})
+	}
+	return response, nil
 }
 
-func (p *RecipesService) GetRecipeById(ctx context.Context, params api.GetRecipeByIdParams) (*api.Recipe, error) {
-	p.mux.Lock()
-	defer p.mux.Unlock()
-
-	Recipe, ok := p.Recipes[params.RecipeId]
-	if !ok {
-		return &api.Recipe{}, ErrRecipeNotFound
+func (p *RecipesService) GetRecipeById(ctx context.Context, params api.GetRecipeByIdParams) (*api.ReadRecipe, error) {
+	recipe, err := db.Query.GetRecipe(ctx, params.RecipeId)
+	if err != nil {
+		return nil, ErrRecipeNotFound
 	}
-	return &Recipe, nil
+	return &api.ReadRecipe{
+		ID:   recipe.ID,
+		Name: recipe.Name,
+	}, nil
 }
 
-func (p *RecipesService) UpdateRecipe(ctx context.Context, params api.UpdateRecipeParams) error {
-	p.mux.Lock()
-	defer p.mux.Unlock()
-
-	Recipe := p.Recipes[params.RecipeId]
-	Recipe.Status = params.Status
-	if val, ok := params.Name.Get(); ok {
-		Recipe.Name = val
-	}
-	p.Recipes[params.RecipeId] = Recipe
-
-	return nil
+func (p *RecipesService) UpdateRecipe(ctx context.Context, req *api.WriteRecipe, params api.UpdateRecipeParams) (*api.ReadRecipe, error) {
+	// TODO: Implement
+	return &api.ReadRecipe{}, nil
 }
