@@ -10,6 +10,6 @@
 </script>
 
 <Header />
-<main>
+<main class="p-3">
     {@render children()}
 </main>
