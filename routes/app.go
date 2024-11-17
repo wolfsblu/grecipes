@@ -10,3 +10,9 @@ func app(w http.ResponseWriter, r *http.Request) {
 	sub, _ := fs.Sub(app.DistFS, "dist")
 	http.ServeFileFS(w, r, sub, "index.html")
 }
+
+func assets(w http.ResponseWriter, r *http.Request) {
+	sub, _ := fs.Sub(app.DistFS, "dist")
+	h := http.FileServerFS(sub)
+	h.ServeHTTP(w, r)
+}
