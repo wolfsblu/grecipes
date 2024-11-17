@@ -1,3 +1,5 @@
 /.idea
 /api
 tmp
+
+.env.local
