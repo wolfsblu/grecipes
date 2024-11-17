@@ -2,12 +2,15 @@ package service
 
 import (
 	"context"
+	"github.com/gorilla/sessions"
+	ht "github.com/ogen-go/ogen/http"
 	"github.com/wolfsblu/grecipes/api"
 	"github.com/wolfsblu/grecipes/db"
 )
 
 type RecipesService struct {
-	Db *db.Queries
+	Db      *db.Queries
+	Session *sessions.CookieStore
 }
 
 func (p *RecipesService) AddRecipe(ctx context.Context, req *api.WriteRecipe) (*api.ReadRecipe, error) {
@@ -58,4 +61,17 @@ func (p *RecipesService) GetRecipeById(ctx context.Context, params api.GetRecipe
 func (p *RecipesService) UpdateRecipe(ctx context.Context, req *api.WriteRecipe, params api.UpdateRecipeParams) (*api.ReadRecipe, error) {
 	// TODO: Implement
 	return &api.ReadRecipe{}, nil
+}
+
+func (p *RecipesService) Login(ctx context.Context, req *api.Credentials) (r *api.ReadUser, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// Register implements register operation.
+//
+// Register a new user.
+//
+// POST /register
+func (p *RecipesService) Register(ctx context.Context) (r *api.ReadUser, _ error) {
+	return r, ht.ErrNotImplemented
 }

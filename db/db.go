@@ -7,7 +7,6 @@ package db
 import (
 	"context"
 	"database/sql"
-	_ "github.com/joho/godotenv/autoload"
 )
 
 type DBTX interface {

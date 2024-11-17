@@ -8,7 +8,36 @@ info:
 tags:
   - name: Recipe
     description: Everything about your recipes
+  - name: User
+    description: Everything related to the user
 paths:
+  /login:
+    post:
+      tags:
+        - User
+      summary: Login a user
+      operationId: login
+      requestBody:
+        description: Login a user with the provided credentials
+        $ref: '#/components/requestBodies/Credentials'
+      responses:
+        '200':
+          description: Successful operation
+          $ref: '#/components/responses/User'
+        default:
+          $ref: '#/components/responses/Error'
+  /register:
+    post:
+      tags:
+        - User
+      summary: Register a new user
+      operationId: register
+      responses:
+        '200':
+          description: Successful operation
+          $ref: '#/components/responses/User'
+        default:
+          $ref: '#/components/responses/Error'
   /recipes:
     get:
       tags:
@@ -99,6 +128,20 @@ paths:
           $ref: '#/components/responses/Error'
 components:
   schemas:
+    Credentials:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          examples:
+            - Spaghetti Carbonara
+        password:
+          type: string
+          examples:
+            - Spaghetti Carbonara
     Error:
       type: object
       description: Represents an error
@@ -140,7 +183,24 @@ components:
               format: int64
               examples:
                 - 10
+    ReadUser:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: integer
+          format: int64
+          examples:
+            - 10
   requestBodies:
+    Credentials:
+      description: User credentials
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Credentials'
     Recipe:
       description: Recipe object that needs to be added to the store
       required: true
@@ -155,6 +215,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+    User:
+      description: User object returned as result
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ReadUser'
     RecipeList:
       description: Recipe object returned as result
       content:
