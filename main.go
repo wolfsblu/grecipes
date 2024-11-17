@@ -23,10 +23,8 @@ func main() {
 	if err != nil {
 		log.Fatalln("failed to connect to the database", err)
 	}
-	svc := &service.RecipesService{
-		Db:      query,
-		Session: sessionStore,
-	}
+	svc := service.New(query, sessionStore)
+
 	handler, err := api.NewServer(svc)
 	if err != nil {
 		log.Fatalln("failed to start api server:", err)

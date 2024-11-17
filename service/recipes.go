@@ -13,6 +13,13 @@ type RecipesService struct {
 	Session *sessions.CookieStore
 }
 
+func New(query *db.Queries, session *sessions.CookieStore) *RecipesService {
+	return &RecipesService{
+		Db:      query,
+		Session: session,
+	}
+}
+
 func (p *RecipesService) AddRecipe(ctx context.Context, req *api.WriteRecipe) (*api.ReadRecipe, error) {
 	recipe, err := p.Db.CreateRecipe(ctx, req.Name)
 	if err != nil {
