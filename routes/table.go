@@ -14,7 +14,7 @@ func RegisterApi(mux *http.ServeMux, apiHandler http.Handler) {
 
 func RegisterApp(mux *http.ServeMux) {
 	mux.HandleFunc("/assets/", assets)
-	mux.HandleFunc("/", index)
+	mux.HandleFunc("/", app)
 }
 
 func RegisterAuth(mux *http.ServeMux, store *sessions.CookieStore) {
