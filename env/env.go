@@ -1,16 +1,25 @@
 package env
 
 import (
+	"fmt"
 	"github.com/joho/godotenv"
 	"log"
 	"os"
 )
 
 func Load() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatalln("failed to load .env file", err)
+	env, ok := os.LookupEnv("APP_ENV")
+	if !ok {
+		env = "dev"
 	}
+
+	_ = godotenv.Load(fmt.Sprintf(".env.%s.local", env))
+	if env != "test" {
+		_ = godotenv.Load(".env.local")
+	}
+
+	_ = godotenv.Load(fmt.Sprintf(".env.%s", env))
+	_ = godotenv.Load()
 }
 
 func MustGet(key string) string {

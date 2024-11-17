@@ -2,11 +2,9 @@ package main
 
 import (
 	"github.com/gorilla/sessions"
-	"github.com/swaggest/swgui/v5emb"
 	"github.com/wolfsblu/grecipes/api"
 	"github.com/wolfsblu/grecipes/db"
 	"github.com/wolfsblu/grecipes/env"
-	"github.com/wolfsblu/grecipes/middleware"
 	"github.com/wolfsblu/grecipes/routes"
 	"github.com/wolfsblu/grecipes/service"
 	"log"
@@ -24,16 +22,18 @@ func main() {
 		log.Fatalln("failed to connect to the database", err)
 	}
 	svc := service.New(query, sessionStore)
+	sec := service.NewSecurity(query, sessionStore)
 
-	handler, err := api.NewServer(svc)
+	apiServer, err := api.NewServer(svc, sec)
+	apiHandler := http.StripPrefix("/api", apiServer)
 	if err != nil {
 		log.Fatalln("failed to start api server:", err)
 	}
 
 	mux := http.NewServeMux()
-	mux.Handle("/api/docs/", v5emb.New("OpenAPI Docs", "/api/openapi.yml", "/api/docs/"))
-	mux.Handle("/api/", middleware.Authenticate(sessionStore, http.StripPrefix("/api", handler)))
-	routes.Register(mux)
+	routes.RegisterApp(mux)
+	routes.RegisterAuth(mux, sessionStore)
+	routes.RegisterApi(mux, apiHandler)
 
 	host := env.MustGet("HOST")
 	err = http.ListenAndServe(host, mux)

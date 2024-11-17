@@ -6,7 +6,7 @@ import (
 	"net/http"
 )
 
-func assets(w http.ResponseWriter, r *http.Request) {
+func login(w http.ResponseWriter, r *http.Request) {
 	sub, _ := fs.Sub(app.DistFS, "dist")
 	h := http.FileServerFS(sub)
 	h.ServeHTTP(w, r)

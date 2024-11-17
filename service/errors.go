@@ -20,6 +20,7 @@ func (e RecipeServiceError) Error() string {
 var (
 	ErrUnhandled      = RecipeServiceError{HttpStatusCode: 500, ErrorCode: 1, ErrorMessage: "internal server error"}
 	ErrRecipeNotFound = RecipeServiceError{HttpStatusCode: 404, ErrorCode: 2, ErrorMessage: "recipe not found"}
+	ErrSecurity       = RecipeServiceError{HttpStatusCode: 403, ErrorCode: 3, ErrorMessage: "authentication cookie not found"}
 )
 
 func (p *RecipesService) NewError(ctx context.Context, err error) (r *api.ErrorStatusCode) {

@@ -10,6 +10,8 @@ tags:
     description: Everything about your recipes
   - name: User
     description: Everything related to the user
+security:
+  - cookieAuth: []
 paths:
   /login:
     post:
@@ -127,6 +129,11 @@ paths:
         default:
           $ref: '#/components/responses/Error'
 components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: JSESSIONID
   schemas:
     Credentials:
       type: object
