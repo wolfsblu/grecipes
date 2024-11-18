@@ -32,7 +32,7 @@ func main() {
 	mux := http.NewServeMux()
 	routes.RegisterApp(mux)
 	routes.RegisterAuth(mux, sessionStore)
-	routes.RegisterApi(mux, apiHandler)
+	routes.RegisterApi(mux, apiServer)
 
 	host := env.MustGet("HOST")
 	err = http.ListenAndServe(host, mux)
