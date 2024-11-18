@@ -3,8 +3,8 @@ package service
 import (
 	"context"
 	"github.com/gorilla/sessions"
-	"github.com/wolfsblu/grecipes/api"
-	"github.com/wolfsblu/grecipes/db"
+	"github.com/wolfsblu/go-chef/api"
+	"github.com/wolfsblu/go-chef/db"
 	"log"
 )
 

@@ -1,6 +1,6 @@
-module github.com/wolfsblu/grecipes
+module github.com/wolfsblu/go-chef
 
-go 1.23.1
+go 1.23
 
 require (
 	github.com/go-faster/errors v0.7.1
@@ -13,7 +13,7 @@ require (
 	go.opentelemetry.io/otel/metric v1.32.0
 	go.opentelemetry.io/otel/trace v1.32.0
 	go.uber.org/multierr v1.11.0
-	modernc.org/sqlite v1.33.1
+	modernc.org/sqlite v1.34.1
 )
 
 require (

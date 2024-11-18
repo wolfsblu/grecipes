@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"github.com/wolfsblu/grecipes/app"
+	"github.com/wolfsblu/go-chef/app"
 	"io/fs"
 	"net/http"
 )

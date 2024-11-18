@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/wolfsblu/grecipes/api"
+	"github.com/wolfsblu/go-chef/api"
 )
 
 type RecipeServiceError struct {

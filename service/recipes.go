@@ -4,8 +4,8 @@ import (
 	"context"
 	"github.com/gorilla/sessions"
 	ht "github.com/ogen-go/ogen/http"
-	"github.com/wolfsblu/grecipes/api"
-	"github.com/wolfsblu/grecipes/db"
+	"github.com/wolfsblu/go-chef/api"
+	"github.com/wolfsblu/go-chef/db"
 )
 
 type RecipesService struct {

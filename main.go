@@ -2,11 +2,11 @@ package main
 
 import (
 	"github.com/gorilla/sessions"
-	"github.com/wolfsblu/grecipes/api"
-	"github.com/wolfsblu/grecipes/db"
-	"github.com/wolfsblu/grecipes/env"
-	"github.com/wolfsblu/grecipes/routes"
-	"github.com/wolfsblu/grecipes/service"
+	"github.com/wolfsblu/go-chef/api"
+	"github.com/wolfsblu/go-chef/db"
+	"github.com/wolfsblu/go-chef/env"
+	"github.com/wolfsblu/go-chef/routes"
+	"github.com/wolfsblu/go-chef/service"
 	"log"
 	"net/http"
 )
