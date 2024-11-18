@@ -25,7 +25,6 @@ func main() {
 	sec := service.NewSecurity(query, sessionStore)
 
 	apiServer, err := api.NewServer(svc, sec)
-	apiHandler := http.StripPrefix("/api", apiServer)
 	if err != nil {
 		log.Fatalln("failed to start api server:", err)
 	}
