@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/ogen-go/ogen/ogenerrors"
 	"github.com/wolfsblu/go-chef/api"
 )
 
@@ -20,13 +21,17 @@ func (e RecipeServiceError) Error() string {
 var (
 	ErrUnhandled      = RecipeServiceError{HttpStatusCode: 500, ErrorCode: 1, ErrorMessage: "internal server error"}
 	ErrRecipeNotFound = RecipeServiceError{HttpStatusCode: 404, ErrorCode: 2, ErrorMessage: "recipe not found"}
-	ErrSecurity       = RecipeServiceError{HttpStatusCode: 403, ErrorCode: 3, ErrorMessage: "authentication cookie not found"}
+	ErrSecurity       = RecipeServiceError{HttpStatusCode: 403, ErrorCode: 3, ErrorMessage: "authentication required"}
 )
 
 func (p *RecipesService) NewError(ctx context.Context, err error) (r *api.ErrorStatusCode) {
 	var serviceError RecipeServiceError
-	ok := errors.As(err, &serviceError)
-	if !ok {
+	var securityError *ogenerrors.SecurityError
+
+	switch {
+	case errors.As(err, &securityError):
+		serviceError = ErrSecurity
+	default:
 		serviceError = ErrUnhandled
 	}
 
@@ -34,7 +39,7 @@ func (p *RecipesService) NewError(ctx context.Context, err error) (r *api.ErrorS
 		StatusCode: serviceError.HttpStatusCode,
 		Response: api.Error{
 			Code:    serviceError.ErrorCode,
-			Message: serviceError.ErrorMessage,
+			Message: fmt.Sprintf("%s: %s", serviceError.ErrorMessage, err),
 		},
 	}
 }
