@@ -26,7 +26,7 @@ paths:
       responses:
         '200':
           description: Successful operation
-          $ref: '#/components/responses/User'
+          $ref: '#/components/responses/AuthenticatedUser'
         default:
           $ref: '#/components/responses/Error'
   /register:
@@ -131,11 +131,17 @@ paths:
         default:
           $ref: '#/components/responses/Error'
 components:
+  headers:
+    Login:
+      description: Sets the session for the logged in user
+      schema:
+        type: string
+        example: SESSID=123; Path=/; HttpOnly
   securitySchemes:
     cookieAuth:
       type: apiKey
       in: cookie
-      name: JSESSIONID
+      name: SESSID
   schemas:
     Credentials:
       type: object
@@ -224,8 +230,11 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    User:
+    AuthenticatedUser:
       description: User object returned as result
+      headers:
+        'Set-Cookie':
+          $ref: '#/components/headers/Login'
       content:
         application/json:
           schema:
@@ -244,3 +253,9 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ReadRecipe'
+    User:
+      description: User object returned as result
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ReadUser'

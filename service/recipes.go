@@ -70,7 +70,7 @@ func (p *RecipesService) UpdateRecipe(ctx context.Context, req *api.WriteRecipe,
 	return &api.ReadRecipe{}, nil
 }
 
-func (p *RecipesService) Login(ctx context.Context, req *api.Credentials) (r *api.ReadUser, _ error) {
+func (p *RecipesService) Login(ctx context.Context, req *api.Credentials) (r *api.AuthenticatedUserHeaders, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
