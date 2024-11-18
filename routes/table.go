@@ -1,7 +1,6 @@
 package routes
 
 import (
-	"github.com/gorilla/sessions"
 	swagger "github.com/swaggest/swgui/v5emb"
 	"net/http"
 )
@@ -15,10 +14,4 @@ func RegisterApi(mux *http.ServeMux, apiServer http.Handler) {
 func RegisterApp(mux *http.ServeMux) {
 	mux.HandleFunc("/assets/", assets)
 	mux.HandleFunc("/", index)
-}
-
-func RegisterAuth(mux *http.ServeMux, store *sessions.CookieStore) {
-	mux.HandleFunc("/auth/login", func(w http.ResponseWriter, r *http.Request) {
-
-	})
 }

@@ -31,7 +31,6 @@ func main() {
 
 	mux := http.NewServeMux()
 	routes.RegisterApp(mux)
-	routes.RegisterAuth(mux, sessionStore)
 	routes.RegisterApi(mux, apiServer)
 
 	host := env.MustGet("HOST")
