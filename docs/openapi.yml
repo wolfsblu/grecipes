@@ -17,6 +17,7 @@ paths:
     post:
       tags:
         - User
+      security: []
       summary: Login a user
       operationId: login
       requestBody:
@@ -32,6 +33,7 @@ paths:
     post:
       tags:
         - User
+      security: []
       summary: Register a new user
       operationId: register
       responses:
@@ -138,10 +140,10 @@ components:
     Credentials:
       type: object
       required:
-        - username
+        - email
         - password
       properties:
-        username:
+        email:
           type: string
           examples:
             - Spaghetti Carbonara
