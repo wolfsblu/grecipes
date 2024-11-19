@@ -23,7 +23,7 @@ func NewSecurity(query *db.Queries, session *sessions.CookieStore) *SecurityServ
 }
 
 func (s *SecurityService) HandleCookieAuth(ctx context.Context, operationName string, t api.CookieAuth) (context.Context, error) {
-	userId, err := security.DecryptUserId(t.APIKey)
+	userId, err := security.GetUserFromSessionCookie(t.APIKey)
 	if err != nil {
 		return nil, errors.Wrap(ErrSecurity, err.Error())
 	}

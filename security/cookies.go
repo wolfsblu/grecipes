@@ -9,12 +9,22 @@ import (
 
 const CookieName = "SESSID"
 
-func NewSessionCookie(payload string) string {
+func NewSessionCookie(userId int64) (string, error) {
+	payload, err := encryptUserId(userId)
+	if err != nil {
+		return "", err
+	}
 	expiry := 7 * 24 * 60 * time.Second // One week
-	return fmt.Sprintf("%s=%s; HttpOnly; Secure; SameSite=strict; Path=/; Max-Age=%d", CookieName, payload, expiry)
+	return fmt.Sprintf(
+		"%s=%s; HttpOnly; Secure; SameSite=strict; Path=/; Max-Age=%d", CookieName, payload, expiry,
+	), nil
 }
 
-func EncryptUserId(userId int64) (string, error) {
+func GetUserFromSessionCookie(cookieValue string) (int64, error) {
+	return decryptUserId(cookieValue)
+}
+
+func encryptUserId(userId int64) (string, error) {
 	var s = securecookie.New(
 		[]byte(env.MustGet("COOKIE_HASH_KEY")),
 		[]byte(env.MustGet("COOKIE_BLOCK_KEY")),
@@ -26,7 +36,7 @@ func EncryptUserId(userId int64) (string, error) {
 	return encoded, nil
 }
 
-func DecryptUserId(cookieValue string) (int64, error) {
+func decryptUserId(cookieValue string) (int64, error) {
 	var userId int64
 	var s = securecookie.New(
 		[]byte(env.MustGet("COOKIE_HASH_KEY")),
