@@ -6,6 +6,7 @@ import (
 	ht "github.com/ogen-go/ogen/http"
 	"github.com/wolfsblu/go-chef/api"
 	"github.com/wolfsblu/go-chef/db"
+	"github.com/wolfsblu/go-chef/security"
 )
 
 type RecipesService struct {
@@ -71,7 +72,20 @@ func (p *RecipesService) UpdateRecipe(ctx context.Context, req *api.WriteRecipe,
 }
 
 func (p *RecipesService) Login(ctx context.Context, req *api.Credentials) (r *api.AuthenticatedUserHeaders, _ error) {
-	return r, ht.ErrNotImplemented
+	var userId int64 = 10
+	encoded, err := security.EncryptUserId(userId)
+	if err != nil {
+		return nil, ErrSecurity
+	}
+	return &api.AuthenticatedUserHeaders{
+		SetCookie: api.OptString{
+			Set:   true,
+			Value: security.NewSessionCookie(encoded),
+		},
+		Response: api.ReadUser{
+			ID: userId,
+		},
+	}, nil
 }
 
 // Register implements register operation.
