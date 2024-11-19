@@ -53,7 +53,7 @@ func (p *RecipesService) GetRecipes(ctx context.Context) ([]api.ReadRecipe, erro
 func (p *RecipesService) GetRecipeById(ctx context.Context, params api.GetRecipeByIdParams) (*api.ReadRecipe, error) {
 	recipe, err := p.Db.GetRecipe(ctx, params.RecipeId)
 	if err != nil {
-		return nil, ErrRecipeNotFound
+		return nil, &ErrRecipeNotFound
 	}
 	return &api.ReadRecipe{
 		ID:   recipe.ID,

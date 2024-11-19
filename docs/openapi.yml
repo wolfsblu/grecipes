@@ -205,12 +205,17 @@ components:
       type: object
       required:
         - id
+        - email
       properties:
         id:
           type: integer
           format: int64
           examples:
             - 10
+        email:
+          type: string
+          examples:
+            - user@example.com
   requestBodies:
     Credentials:
       description: User credentials

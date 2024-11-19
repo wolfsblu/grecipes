@@ -2,17 +2,27 @@ package service
 
 import (
 	"context"
-	"github.com/go-faster/errors"
+	"fmt"
 	"github.com/wolfsblu/go-chef/api"
 	"github.com/wolfsblu/go-chef/db"
 	"github.com/wolfsblu/go-chef/security"
 )
 
 func (p *RecipesService) Login(ctx context.Context, req *api.Credentials) (r *api.AuthenticatedUserHeaders, _ error) {
-	var userId int64 = 10
-	cookie, err := security.NewSessionCookie(userId)
+	user, err := p.Db.GetUserByEmail(ctx, req.GetEmail())
 	if err != nil {
-		return nil, ErrSecurity
+		return nil, fmt.Errorf("%w: %w", &ErrSecurity, err)
+	}
+	ok, err := security.ComparePasswordAndHash(req.GetPassword(), user.PasswordHash)
+	if err != nil {
+		return nil, fmt.Errorf("%w: %w", &ErrSecurity, err)
+	} else if !ok {
+		return nil, fmt.Errorf("hallo welt: %w", &ErrInvalidCredentials)
+	}
+
+	cookie, err := security.NewSessionCookie(user.ID)
+	if err != nil {
+		return nil, &ErrSecurity
 	}
 	return &api.AuthenticatedUserHeaders{
 		SetCookie: api.OptString{
@@ -20,7 +30,8 @@ func (p *RecipesService) Login(ctx context.Context, req *api.Credentials) (r *ap
 			Value: cookie,
 		},
 		Response: api.ReadUser{
-			ID: userId,
+			ID:    user.ID,
+			Email: user.Email,
 		},
 	}, nil
 }
@@ -28,7 +39,7 @@ func (p *RecipesService) Login(ctx context.Context, req *api.Credentials) (r *ap
 func (p *RecipesService) Register(ctx context.Context, c *api.Credentials) (*api.ReadUser, error) {
 	hash, err := security.CreateHash(c.Password, security.DefaultHashParams)
 	if err != nil {
-		return nil, errors.Wrap(err, ErrSecurity.Error())
+		return nil, fmt.Errorf("%w: %w", &ErrSecurity, err)
 	}
 	creds := db.CreateUserParams{
 		Email:        c.Email,
@@ -36,9 +47,10 @@ func (p *RecipesService) Register(ctx context.Context, c *api.Credentials) (*api
 	}
 	user, err := p.Db.CreateUser(ctx, creds)
 	if err != nil {
-		return nil, errors.Wrap(err, ErrSecurity.Error())
+		return nil, fmt.Errorf("%w: %w", &ErrSecurity, err)
 	}
 	return &api.ReadUser{
-		ID: user.ID,
+		ID:    user.ID,
+		Email: user.Email,
 	}, nil
 }
