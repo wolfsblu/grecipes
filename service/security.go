@@ -3,7 +3,6 @@ package service
 import (
 	"context"
 	"github.com/go-faster/errors"
-	"github.com/gorilla/sessions"
 	"github.com/wolfsblu/go-chef/api"
 	"github.com/wolfsblu/go-chef/db"
 	"github.com/wolfsblu/go-chef/security"
@@ -11,14 +10,12 @@ import (
 )
 
 type SecurityService struct {
-	Db      *db.Queries
-	Session *sessions.CookieStore
+	Db *db.Queries
 }
 
-func NewSecurity(query *db.Queries, session *sessions.CookieStore) *SecurityService {
+func NewSecurity(query *db.Queries) *SecurityService {
 	return &SecurityService{
-		Db:      query,
-		Session: session,
+		Db: query,
 	}
 }
 

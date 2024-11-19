@@ -2,20 +2,17 @@ package service
 
 import (
 	"context"
-	"github.com/gorilla/sessions"
 	"github.com/wolfsblu/go-chef/api"
 	"github.com/wolfsblu/go-chef/db"
 )
 
 type RecipesService struct {
-	Db      *db.Queries
-	Session *sessions.CookieStore
+	Db *db.Queries
 }
 
-func New(query *db.Queries, session *sessions.CookieStore) *RecipesService {
+func New(query *db.Queries) *RecipesService {
 	return &RecipesService{
-		Db:      query,
-		Session: session,
+		Db: query,
 	}
 }
 

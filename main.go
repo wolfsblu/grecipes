@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/gorilla/sessions"
 	"github.com/wolfsblu/go-chef/api"
 	"github.com/wolfsblu/go-chef/db"
 	"github.com/wolfsblu/go-chef/env"
@@ -14,15 +13,13 @@ import (
 func main() {
 	env.Load()
 
-	var sessionStore = sessions.NewCookieStore([]byte(env.MustGet("SESSION_KEY")))
-
 	dbPath := env.MustGet("DB_PATH")
 	query, err := db.Connect(dbPath)
 	if err != nil {
 		log.Fatalln("failed to connect to the database", err)
 	}
-	svc := service.New(query, sessionStore)
-	sec := service.NewSecurity(query, sessionStore)
+	svc := service.New(query)
+	sec := service.NewSecurity(query)
 
 	apiServer, err := api.NewServer(svc, sec)
 	if err != nil {

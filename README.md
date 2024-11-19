@@ -5,6 +5,7 @@
     ```
 2. Build the frontend application 
     ```
+    npm --prefix app install
     npm --prefix app run build
     ```
 3. Build the project
