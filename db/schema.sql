@@ -22,3 +22,10 @@ CREATE TABLE ingredients
     name      TEXT    NOT NULL,
     amount    REAL    NOT NULL
 );
+
+CREATE TABLE users
+(
+    id            INTEGER PRIMARY KEY,
+    email         TEXT NOT NULL UNIQUE,
+    password_hash TEXT NOT NULL
+);

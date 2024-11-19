@@ -36,6 +36,9 @@ paths:
       security: []
       summary: Register a new user
       operationId: register
+      requestBody:
+        description: The new user credentials
+        $ref: '#/components/requestBodies/Credentials'
       responses:
         '200':
           description: Successful operation

@@ -22,7 +22,7 @@ func NewSecurity(query *db.Queries) *SecurityService {
 func (s *SecurityService) HandleCookieAuth(ctx context.Context, operationName string, t api.CookieAuth) (context.Context, error) {
 	userId, err := security.GetUserFromSessionCookie(t.APIKey)
 	if err != nil {
-		return nil, errors.Wrap(ErrSecurity, err.Error())
+		return nil, errors.Wrap(err, ErrSecurity.Error())
 	}
 	log.Println("Logged in as user with ID", userId)
 	return ctx, nil
