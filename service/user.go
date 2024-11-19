@@ -47,7 +47,7 @@ func (p *RecipesService) Register(ctx context.Context, c *api.Credentials) (*api
 	}
 	user, err := p.Db.CreateUser(ctx, creds)
 	if err != nil {
-		return nil, fmt.Errorf("%w: %w", &ErrSecurity, err)
+		return nil, fmt.Errorf("%w: %w", &ErrRegistration, err)
 	}
 	return &api.ReadUser{
 		ID:    user.ID,
