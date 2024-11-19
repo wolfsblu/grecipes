@@ -2,4 +2,9 @@
 /api
 tmp
 
+# sqlc artifacts
+/db/db.go
+/db/models.go
+/db/*.sql.go
+
 .env.local
