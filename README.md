@@ -1,5 +1,5 @@
 ## Build Steps
-1. Generate the API server based on the OpenAPI spec with
+1. Generate the API server and SQL queries
     ```
     go generate
     ```
@@ -19,8 +19,12 @@ Assuming you want to run the binary directly from the repository:
     ```shell
     atlas migrate apply --dir "file://db/migrations" --url "sqlite://tmp/db.sqlite" 
     ```
-2. Start the server
+2. Copy the .env file and provide values for any empty variables
+    ```shell
+    cp .env tmp/
     ```
-    DB_PATH=tmp/db.sqlite ./tmp/main
+3. Start the server
+    ```
+    ./tmp/main
     ```
 3. Open the frontend at http://localhost:8080
