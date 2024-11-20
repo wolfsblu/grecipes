@@ -6,7 +6,12 @@ import (
 	"github.com/wolfsblu/go-chef/api"
 	"github.com/wolfsblu/go-chef/db"
 	"github.com/wolfsblu/go-chef/security"
-	"log"
+)
+
+type ContextKey string
+
+const (
+	CtxKeyUser = ContextKey("User")
 )
 
 type SecurityService struct {
@@ -24,6 +29,9 @@ func (s *SecurityService) HandleCookieAuth(ctx context.Context, operationName st
 	if err != nil {
 		return nil, fmt.Errorf("%w: %w", &ErrSecurity, err)
 	}
-	log.Println("Logged in as user with ID", userId)
-	return ctx, nil
+	user, err := s.Db.GetUser(ctx, userId)
+	if err != nil {
+		return nil, fmt.Errorf("%w: %w", &ErrSecurity, err)
+	}
+	return context.WithValue(ctx, CtxKeyUser, user), nil
 }
