@@ -36,7 +36,8 @@ func (p *RecipesService) DeleteRecipe(ctx context.Context, params api.DeleteReci
 }
 
 func (p *RecipesService) GetRecipes(ctx context.Context) ([]api.ReadRecipe, error) {
-	recipes, err := p.Db.ListRecipes(ctx)
+	user := ctx.Value(CtxKeyUser).(*db.User)
+	recipes, err := p.Db.ListRecipes(ctx, user.ID)
 	if err != nil {
 		return nil, err
 	}

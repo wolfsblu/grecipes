@@ -21,7 +21,7 @@ Assuming you want to run the binary directly from the repository:
     ```
 2. Copy the .env file and provide values for any empty variables
     ```shell
-    cp .env tmp/
+    cp .env.example tmp/
     ```
 3. Start the server
     ```

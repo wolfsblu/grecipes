@@ -33,5 +33,5 @@ func (s *SecurityService) HandleCookieAuth(ctx context.Context, operationName st
 	if err != nil {
 		return nil, fmt.Errorf("%w: %w", &ErrSecurity, err)
 	}
-	return context.WithValue(ctx, CtxKeyUser, user), nil
+	return context.WithValue(ctx, CtxKeyUser, &user), nil
 }
