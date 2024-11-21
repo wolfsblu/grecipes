@@ -29,6 +29,21 @@ paths:
           $ref: '#/components/responses/AuthenticatedUser'
         default:
           $ref: '#/components/responses/Error'
+  /logout:
+    post:
+      tags:
+        - User
+      security: []
+      summary: Logout a user
+      operationId: logout
+      responses:
+        '200':
+          description: Successful operation
+          headers:
+            'Set-Cookie':
+              $ref: '#/components/headers/SessionCookie'
+        default:
+          $ref: '#/components/responses/Error'
   /register:
     post:
       tags:
@@ -135,7 +150,7 @@ paths:
           $ref: '#/components/responses/Error'
 components:
   headers:
-    Login:
+    SessionCookie:
       description: Sets the session for the logged in user
       schema:
         type: string
@@ -242,7 +257,7 @@ components:
       description: User object returned as result
       headers:
         'Set-Cookie':
-          $ref: '#/components/headers/Login'
+          $ref: '#/components/headers/SessionCookie'
       content:
         application/json:
           schema:

@@ -36,6 +36,16 @@ func (p *RecipesService) Login(ctx context.Context, req *api.Credentials) (r *ap
 	}, nil
 }
 
+func (p *RecipesService) Logout(ctx context.Context) (*api.LogoutOK, error) {
+	cookie := security.ExpireSessionCookie()
+	return &api.LogoutOK{
+		SetCookie: api.OptString{
+			Set:   true,
+			Value: cookie,
+		},
+	}, nil
+}
+
 func (p *RecipesService) Register(ctx context.Context, c *api.Credentials) (*api.ReadUser, error) {
 	hash, err := security.CreateHash(c.Password, security.DefaultHashParams)
 	if err != nil {

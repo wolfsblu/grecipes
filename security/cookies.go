@@ -20,6 +20,12 @@ func NewSessionCookie(userId int64) (string, error) {
 	), nil
 }
 
+func ExpireSessionCookie() string {
+	return fmt.Sprintf(
+		"%s=; HttpOnly; Secure; SameSite=strict; Path=/; Max-Age=%d", CookieName, 0,
+	)
+}
+
 func GetUserFromSessionCookie(cookieValue string) (int64, error) {
 	return decryptUserId(cookieValue)
 }
