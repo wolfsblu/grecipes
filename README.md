@@ -15,10 +15,11 @@
 
 ## Running the Application
 Assuming you want to run the binary directly from the repository:
-1. Apply any pending database migrations
-    ```shell
-    atlas migrate apply --dir "file://db/migrations" --url "sqlite://tmp/db.sqlite" 
-    ```
+
+1. Apply database schema with [atlas](https://atlasgo.io/docs)
+   ```
+   atlas --env local schema apply 
+   ```
 2. Copy the .env file and provide values for any empty variables
     ```shell
     cp .env.example tmp/
