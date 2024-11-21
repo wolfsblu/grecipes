@@ -17,7 +17,12 @@ func New(query *db.Queries) *RecipesService {
 }
 
 func (p *RecipesService) AddRecipe(ctx context.Context, req *api.WriteRecipe) (*api.ReadRecipe, error) {
-	recipe, err := p.Db.CreateRecipe(ctx, req.Name)
+	user := ctx.Value(CtxKeyUser).(*db.User)
+	payload := db.CreateRecipeParams{
+		Name:      req.Name,
+		CreatedBy: user.ID,
+	}
+	recipe, err := p.Db.CreateRecipe(ctx, payload)
 	if err != nil {
 		return nil, err
 	}

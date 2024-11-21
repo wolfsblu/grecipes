@@ -11,8 +11,8 @@ WHERE created_by = ?
 ORDER BY name;
 
 -- name: CreateRecipe :one
-INSERT INTO recipes (name)
-VALUES (?)
+INSERT INTO recipes (name, created_by)
+VALUES (?, ?)
 RETURNING *;
 
 -- name: UpdateRecipe :exec
