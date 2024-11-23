@@ -4,8 +4,8 @@ import (
 	"github.com/wolfsblu/go-chef/api"
 	"github.com/wolfsblu/go-chef/db"
 	"github.com/wolfsblu/go-chef/env"
+	"github.com/wolfsblu/go-chef/handlers"
 	"github.com/wolfsblu/go-chef/routes"
-	"github.com/wolfsblu/go-chef/service"
 	"log"
 	"net/http"
 )
@@ -18,8 +18,8 @@ func main() {
 	if err != nil {
 		log.Fatalln("failed to connect to the database", err)
 	}
-	svc := service.New(query)
-	sec := service.NewSecurity(query)
+	svc := handlers.New(query)
+	sec := handlers.NewSecurity(query)
 
 	apiServer, err := api.NewServer(svc, sec)
 	if err != nil {
