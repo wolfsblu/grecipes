@@ -1,5 +1,5 @@
 /.idea
-/api
+/api/*_gen.go
 tmp
 
 # sqlc artifacts

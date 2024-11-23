@@ -8,7 +8,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json && tsc -p tsconfig.node.json",
-    "generate": "npx openapi-typescript ../docs/openapi.yml -o api.d.ts"
+    "generate": "npx openapi-typescript ../api/openapi.yml -o api.d.ts"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^4.0.0",
