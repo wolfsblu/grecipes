@@ -6,23 +6,23 @@ import (
 	"github.com/wolfsblu/go-chef/db"
 )
 
-type RecipesService struct {
-	Db *db.Queries
+type RecipeHandler struct {
+	DB *db.Queries
 }
 
-func New(query *db.Queries) *RecipesService {
-	return &RecipesService{
-		Db: query,
+func NewRecipeHandler(query *db.Queries) *RecipeHandler {
+	return &RecipeHandler{
+		DB: query,
 	}
 }
 
-func (p *RecipesService) AddRecipe(ctx context.Context, req *api.WriteRecipe) (*api.ReadRecipe, error) {
+func (h *RecipeHandler) AddRecipe(ctx context.Context, req *api.WriteRecipe) (*api.ReadRecipe, error) {
 	user := ctx.Value(CtxKeyUser).(*db.User)
 	payload := db.CreateRecipeParams{
 		Name:      req.Name,
 		CreatedBy: user.ID,
 	}
-	recipe, err := p.Db.CreateRecipe(ctx, payload)
+	recipe, err := h.DB.CreateRecipe(ctx, payload)
 	if err != nil {
 		return nil, err
 	}
@@ -32,17 +32,17 @@ func (p *RecipesService) AddRecipe(ctx context.Context, req *api.WriteRecipe) (*
 	}, nil
 }
 
-func (p *RecipesService) DeleteRecipe(ctx context.Context, params api.DeleteRecipeParams) error {
-	err := p.Db.DeleteRecipe(ctx, params.RecipeId)
+func (h *RecipeHandler) DeleteRecipe(ctx context.Context, params api.DeleteRecipeParams) error {
+	err := h.DB.DeleteRecipe(ctx, params.RecipeId)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func (p *RecipesService) GetRecipes(ctx context.Context) ([]api.ReadRecipe, error) {
+func (h *RecipeHandler) GetRecipes(ctx context.Context) ([]api.ReadRecipe, error) {
 	user := ctx.Value(CtxKeyUser).(*db.User)
-	recipes, err := p.Db.ListRecipes(ctx, user.ID)
+	recipes, err := h.DB.ListRecipes(ctx, user.ID)
 	if err != nil {
 		return nil, err
 	}
@@ -56,8 +56,8 @@ func (p *RecipesService) GetRecipes(ctx context.Context) ([]api.ReadRecipe, erro
 	return response, nil
 }
 
-func (p *RecipesService) GetRecipeById(ctx context.Context, params api.GetRecipeByIdParams) (*api.ReadRecipe, error) {
-	recipe, err := p.Db.GetRecipe(ctx, params.RecipeId)
+func (h *RecipeHandler) GetRecipeById(ctx context.Context, params api.GetRecipeByIdParams) (*api.ReadRecipe, error) {
+	recipe, err := h.DB.GetRecipe(ctx, params.RecipeId)
 	if err != nil {
 		return nil, &ErrRecipeNotFound
 	}
@@ -67,7 +67,7 @@ func (p *RecipesService) GetRecipeById(ctx context.Context, params api.GetRecipe
 	}, nil
 }
 
-func (p *RecipesService) UpdateRecipe(ctx context.Context, req *api.WriteRecipe, params api.UpdateRecipeParams) (*api.ReadRecipe, error) {
+func (h *RecipeHandler) UpdateRecipe(ctx context.Context, req *api.WriteRecipe, params api.UpdateRecipeParams) (*api.ReadRecipe, error) {
 	// TODO: Implement
 	return &api.ReadRecipe{}, nil
 }

@@ -25,7 +25,7 @@ var (
 	ErrRegistration       = RecipeServiceError{HttpStatusCode: 422, Code: 5, Message: "failed to register user"}
 )
 
-func (p *RecipesService) NewError(ctx context.Context, err error) (r *api.ErrorStatusCode) {
+func (h *RecipeHandler) NewError(ctx context.Context, err error) (r *api.ErrorStatusCode) {
 	var serviceError *RecipeServiceError
 	var securityError *ogenerrors.SecurityError
 

@@ -14,22 +14,22 @@ const (
 	CtxKeyUser = ContextKey("User")
 )
 
-type SecurityService struct {
-	Db *db.Queries
+type SecurityHandler struct {
+	DB *db.Queries
 }
 
-func NewSecurity(query *db.Queries) *SecurityService {
-	return &SecurityService{
-		Db: query,
+func NewSecurityHandler(query *db.Queries) *SecurityHandler {
+	return &SecurityHandler{
+		DB: query,
 	}
 }
 
-func (s *SecurityService) HandleCookieAuth(ctx context.Context, operationName string, t api.CookieAuth) (context.Context, error) {
+func (h *SecurityHandler) HandleCookieAuth(ctx context.Context, operationName string, t api.CookieAuth) (context.Context, error) {
 	userId, err := security.GetUserFromSessionCookie(t.APIKey)
 	if err != nil {
 		return nil, fmt.Errorf("%w: %w", &ErrSecurity, err)
 	}
-	user, err := s.Db.GetUser(ctx, userId)
+	user, err := h.DB.GetUser(ctx, userId)
 	if err != nil {
 		return nil, fmt.Errorf("%w: %w", &ErrSecurity, err)
 	}

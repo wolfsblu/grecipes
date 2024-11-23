@@ -8,8 +8,8 @@ import (
 	"github.com/wolfsblu/go-chef/security"
 )
 
-func (p *RecipesService) Login(ctx context.Context, req *api.Credentials) (r *api.AuthenticatedUserHeaders, _ error) {
-	user, err := p.Db.GetUserByEmail(ctx, req.GetEmail())
+func (h *RecipeHandler) Login(ctx context.Context, req *api.Credentials) (r *api.AuthenticatedUserHeaders, _ error) {
+	user, err := h.DB.GetUserByEmail(ctx, req.GetEmail())
 	if err != nil {
 		return nil, fmt.Errorf("%w: %w", &ErrSecurity, err)
 	}
@@ -36,7 +36,7 @@ func (p *RecipesService) Login(ctx context.Context, req *api.Credentials) (r *ap
 	}, nil
 }
 
-func (p *RecipesService) Logout(ctx context.Context) (*api.LogoutOK, error) {
+func (h *RecipeHandler) Logout(ctx context.Context) (*api.LogoutOK, error) {
 	cookie := security.ExpireSessionCookie()
 	return &api.LogoutOK{
 		SetCookie: api.OptString{
@@ -46,7 +46,7 @@ func (p *RecipesService) Logout(ctx context.Context) (*api.LogoutOK, error) {
 	}, nil
 }
 
-func (p *RecipesService) Register(ctx context.Context, c *api.Credentials) (*api.ReadUser, error) {
+func (h *RecipeHandler) Register(ctx context.Context, c *api.Credentials) (*api.ReadUser, error) {
 	hash, err := security.CreateHash(c.Password, security.DefaultHashParams)
 	if err != nil {
 		return nil, fmt.Errorf("%w: %w", &ErrSecurity, err)
@@ -55,7 +55,7 @@ func (p *RecipesService) Register(ctx context.Context, c *api.Credentials) (*api
 		Email:        c.Email,
 		PasswordHash: hash,
 	}
-	user, err := p.Db.CreateUser(ctx, creds)
+	user, err := h.DB.CreateUser(ctx, creds)
 	if err != nil {
 		return nil, fmt.Errorf("%w: %w", &ErrRegistration, err)
 	}

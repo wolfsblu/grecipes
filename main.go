@@ -18,10 +18,10 @@ func main() {
 	if err != nil {
 		log.Fatalln("failed to connect to the database", err)
 	}
-	svc := handlers.New(query)
-	sec := handlers.NewSecurity(query)
 
-	apiServer, err := api.NewServer(svc, sec)
+	recipes := handlers.NewRecipeHandler(query)
+	security := handlers.NewSecurityHandler(query)
+	apiServer, err := api.NewServer(recipes, security)
 	if err != nil {
 		log.Fatalln("failed to start api server:", err)
 	}
