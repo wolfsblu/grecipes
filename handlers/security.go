@@ -8,10 +8,10 @@ import (
 	"github.com/wolfsblu/go-chef/security"
 )
 
-type ContextKey string
+type contextKey string
 
 const (
-	CtxKeyUser = ContextKey("User")
+	ctxKeyUser = contextKey("User")
 )
 
 type SecurityHandler struct {
@@ -33,5 +33,5 @@ func (h *SecurityHandler) HandleCookieAuth(ctx context.Context, _ string, t api.
 	if err != nil {
 		return nil, fmt.Errorf("%w: %w", &ErrSecurity, err)
 	}
-	return context.WithValue(ctx, CtxKeyUser, &user), nil
+	return context.WithValue(ctx, ctxKeyUser, &user), nil
 }

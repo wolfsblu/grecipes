@@ -17,7 +17,7 @@ func NewRecipeHandler(query *db.Queries) *RecipeHandler {
 }
 
 func (h *RecipeHandler) AddRecipe(ctx context.Context, req *api.WriteRecipe) (*api.ReadRecipe, error) {
-	user := ctx.Value(CtxKeyUser).(*db.User)
+	user := ctx.Value(ctxKeyUser).(*db.User)
 	payload := db.CreateRecipeParams{
 		Name:      req.Name,
 		CreatedBy: user.ID,
@@ -41,7 +41,7 @@ func (h *RecipeHandler) DeleteRecipe(ctx context.Context, params api.DeleteRecip
 }
 
 func (h *RecipeHandler) GetRecipes(ctx context.Context) ([]api.ReadRecipe, error) {
-	user := ctx.Value(CtxKeyUser).(*db.User)
+	user := ctx.Value(ctxKeyUser).(*db.User)
 	recipes, err := h.DB.ListRecipes(ctx, user.ID)
 	if err != nil {
 		return nil, err
