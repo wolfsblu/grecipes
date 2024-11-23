@@ -4,6 +4,74 @@
  */
 
 export interface paths {
+    "/login": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Login a user */
+        post: operations["login"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/logout": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Logout a user */
+        post: operations["logout"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/register": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Register a new user */
+        post: operations["register"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/user/profile/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get the profile of the logged in user */
+        get: operations["getUserProfile"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/recipes": {
         parameters: {
             query?: never;
@@ -48,6 +116,10 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        Credentials: {
+            email: string;
+            password: string;
+        };
         /** @description Represents an error */
         Error: {
             code: number;
@@ -58,30 +130,106 @@ export interface components {
          * @enum {string}
          */
         RecipeStatus: "available" | "pending" | "sold";
-        Recipe: {
-            /** Format: int64 */
-            id?: number;
+        WriteRecipe: {
             name: string;
-            photoUrls?: string[];
-            status?: components["schemas"]["RecipeStatus"];
+        };
+        ReadRecipe: components["schemas"]["WriteRecipe"] & {
+            /** Format: int64 */
+            id: number;
+        };
+        ReadUser: {
+            /** Format: int64 */
+            id: number;
+            email: string;
         };
     };
-    responses: never;
-    parameters: never;
-    requestBodies: {
-        /** @description Recipe object that needs to be added to the store */
-        Recipe: {
+    responses: {
+        /** @description Something went wrong */
+        Error: {
+            headers: {
+                [name: string]: unknown;
+            };
             content: {
-                "application/json": components["schemas"]["Recipe"];
+                "application/json": components["schemas"]["Error"];
+            };
+        };
+        /** @description User object returned as result */
+        AuthenticatedUser: {
+            headers: {
+                "Set-Cookie": components["headers"]["SessionCookie"];
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["ReadUser"];
+            };
+        };
+        /** @description Recipe object returned as result */
+        RecipeList: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["ReadRecipe"][];
+            };
+        };
+        /** @description Recipe object returned as result */
+        Recipe: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["ReadRecipe"];
+            };
+        };
+        /** @description User object returned as result */
+        User: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["ReadUser"];
             };
         };
     };
-    headers: never;
+    parameters: never;
+    requestBodies: {
+        /** @description User credentials */
+        Credentials: {
+            content: {
+                "application/json": components["schemas"]["Credentials"];
+            };
+        };
+        /** @description Recipe object that needs to be added to the store */
+        Recipe: {
+            content: {
+                "application/json": components["schemas"]["WriteRecipe"];
+            };
+        };
+    };
+    headers: {
+        /** @description Sets the session for the logged in user */
+        SessionCookie: string;
+    };
     pathItems: never;
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    getRecipes: {
+    login: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Login a user with the provided credentials */
+        requestBody: components["requestBodies"]["Credentials"];
+        responses: {
+            /** @description Successful operation */
+            200: components["responses"]["AuthenticatedUser"];
+            default: components["responses"]["Error"];
+        };
+    };
+    logout: {
         parameters: {
             query?: never;
             header?: never;
@@ -93,21 +241,55 @@ export interface operations {
             /** @description Successful operation */
             200: {
                 headers: {
+                    "Set-Cookie": components["headers"]["SessionCookie"];
                     [name: string]: unknown;
                 };
-                content: {
-                    "application/json": components["schemas"]["Recipe"][];
-                };
+                content?: never;
             };
-            /** @description Something went wrong */
-            default: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Error"];
-                };
-            };
+            default: components["responses"]["Error"];
+        };
+    };
+    register: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description The new user credentials */
+        requestBody: components["requestBodies"]["Credentials"];
+        responses: {
+            /** @description Successful operation */
+            200: components["responses"]["User"];
+            default: components["responses"]["Error"];
+        };
+    };
+    getUserProfile: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful operation */
+            200: components["responses"]["User"];
+            default: components["responses"]["Error"];
+        };
+    };
+    getRecipes: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful operation */
+            200: components["responses"]["RecipeList"];
+            default: components["responses"]["Error"];
         };
     };
     addRecipe: {
@@ -118,30 +300,11 @@ export interface operations {
             cookie?: never;
         };
         /** @description Create a new recipe in the store */
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["Recipe"];
-            };
-        };
+        requestBody: components["requestBodies"]["Recipe"];
         responses: {
             /** @description Successful operation */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Recipe"];
-                };
-            };
-            /** @description Something went wrong */
-            default: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Error"];
-                };
-            };
+            200: components["responses"]["Recipe"];
+            default: components["responses"]["Error"];
         };
     };
     getRecipeById: {
@@ -157,58 +320,25 @@ export interface operations {
         requestBody?: never;
         responses: {
             /** @description successful operation */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Recipe"];
-                };
-            };
-            /** @description Something went wrong */
-            default: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Error"];
-                };
-            };
+            200: components["responses"]["Recipe"];
+            default: components["responses"]["Error"];
         };
     };
     updateRecipe: {
         parameters: {
-            query?: {
-                /** @description Name of the recipe that needs to be updated */
-                name?: string;
-                /** @description Status of the recipe that needs to be updated */
-                status?: components["schemas"]["RecipeStatus"];
-            };
+            query?: never;
             header?: never;
             path: {
-                /** @description ID of the recipe that needs to be updated */
+                /** @description ID of the recipe to update */
                 recipeId: number;
             };
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: components["requestBodies"]["Recipe"];
         responses: {
             /** @description successful operation */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-            /** @description Something went wrong */
-            default: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Error"];
-                };
-            };
+            200: components["responses"]["Recipe"];
+            default: components["responses"]["Error"];
         };
     };
     deleteRecipe: {
@@ -230,15 +360,7 @@ export interface operations {
                 };
                 content?: never;
             };
-            /** @description Something went wrong */
-            default: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["Error"];
-                };
-            };
+            default: components["responses"]["Error"];
         };
     };
 }

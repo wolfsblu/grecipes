@@ -64,3 +64,11 @@ func (h *RecipeHandler) Register(ctx context.Context, c *api.Credentials) (*api.
 		Email: user.Email,
 	}, nil
 }
+
+func (h *RecipeHandler) GetUserProfile(ctx context.Context) (*api.ReadUser, error) {
+	user := ctx.Value(CtxKeyUser).(*db.User)
+	return &api.ReadUser{
+		ID:    user.ID,
+		Email: user.Email,
+	}, nil
+}

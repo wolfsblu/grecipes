@@ -9,6 +9,10 @@ export interface Recipe {
     minutes: number | null
 }
 
+export const fetchProfile = async () => {
+    return client.GET("/user/profile/")
+}
+
 export const fetchRecipes = async () => {
     return client.GET("/recipes")
 }

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type {Component, Snippet} from "svelte";
+    import {type Component, type Snippet} from "svelte";
 
     interface Props {
         Header?: Component,

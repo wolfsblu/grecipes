@@ -60,6 +60,18 @@ paths:
           $ref: '#/components/responses/User'
         default:
           $ref: '#/components/responses/Error'
+  /user/profile/:
+    get:
+      tags:
+        - User
+      summary: Get the profile of the logged in user
+      operationId: getUserProfile
+      responses:
+        '200':
+          description: Successful operation
+          $ref: '#/components/responses/User'
+        default:
+          $ref: '#/components/responses/Error'
   /recipes:
     get:
       tags:
