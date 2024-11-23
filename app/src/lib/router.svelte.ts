@@ -8,7 +8,7 @@ import Login from "../pages/Login.svelte";
 import NotFound from "../pages/errors/404.svelte"
 import Register from "../pages/Register.svelte";
 
-let page: Component = $state(Index);
+let page: Component | null = $state(null);
 
 export const createRouter = () => {
     const requireLogin: Callback = async (_, next) => {
