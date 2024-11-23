@@ -28,4 +28,4 @@ Assuming you want to run the binary directly from the repository:
     ```
     ./tmp/main
     ```
-3. Open the [frontend](http://localhost:8080)
+3. Open the [frontend](http://localhost:8080) or browse the [API](http://localhost:8080/api/docs)
