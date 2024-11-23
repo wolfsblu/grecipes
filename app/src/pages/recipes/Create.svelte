@@ -1,6 +1,6 @@
 <script>
     import Layout from "../../Layout.svelte";
-    import Navbar from "../../lib/components/Navbar.svelte";
+    import Navbar from "../../lib/components/navigation/Navbar.svelte";
     import Form from "../../lib/components/recipes/Form.svelte";
 </script>
 

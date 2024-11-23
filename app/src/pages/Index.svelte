@@ -1,6 +1,6 @@
 <script lang="ts">
     import Layout from "../Layout.svelte";
-    import Navbar from "../lib/components/Navbar.svelte";
+    import Navbar from "../lib/components/navigation/Navbar.svelte";
     import {fetchRecipes} from "../lib/api/client";
 
     let recipeResult = fetchRecipes()
