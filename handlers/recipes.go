@@ -67,7 +67,7 @@ func (h *RecipeHandler) GetRecipeById(ctx context.Context, params api.GetRecipeB
 	}, nil
 }
 
-func (h *RecipeHandler) UpdateRecipe(ctx context.Context, req *api.WriteRecipe, params api.UpdateRecipeParams) (*api.ReadRecipe, error) {
+func (h *RecipeHandler) UpdateRecipe(_ context.Context, _ *api.WriteRecipe, _ api.UpdateRecipeParams) (*api.ReadRecipe, error) {
 	// TODO: Implement
 	return &api.ReadRecipe{}, nil
 }

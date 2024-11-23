@@ -24,7 +24,7 @@ func NewSecurityHandler(query *db.Queries) *SecurityHandler {
 	}
 }
 
-func (h *SecurityHandler) HandleCookieAuth(ctx context.Context, operationName string, t api.CookieAuth) (context.Context, error) {
+func (h *SecurityHandler) HandleCookieAuth(ctx context.Context, _ string, t api.CookieAuth) (context.Context, error) {
 	userId, err := security.GetUserFromSessionCookie(t.APIKey)
 	if err != nil {
 		return nil, fmt.Errorf("%w: %w", &ErrSecurity, err)

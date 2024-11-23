@@ -6,5 +6,5 @@ import (
 )
 
 func apiDocs(w http.ResponseWriter, r *http.Request) {
-	http.ServeFileFS(w, r, api.APIDocsFS, "openapi.yml")
+	http.ServeFileFS(w, r, api.DocsFS, "openapi.yml")
 }

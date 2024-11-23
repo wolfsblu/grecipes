@@ -36,7 +36,7 @@ func (h *RecipeHandler) Login(ctx context.Context, req *api.Credentials) (r *api
 	}, nil
 }
 
-func (h *RecipeHandler) Logout(ctx context.Context) (*api.LogoutOK, error) {
+func (h *RecipeHandler) Logout(_ context.Context) (*api.LogoutOK, error) {
 	cookie := security.ExpireSessionCookie()
 	return &api.LogoutOK{
 		SetCookie: api.OptString{
