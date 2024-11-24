@@ -2,13 +2,17 @@
     import Layout from "../Layout.svelte";
     import Navbar from "../lib/components/navigation/Navbar.svelte";
     import {fetchRecipes} from "../lib/api/client";
+    import t, {localeSwitcher} from "../lib/i18n/i18n.svelte";
 
     let recipeResult = fetchRecipes()
 </script>
 
 <Layout Header={Navbar}>
     <h1>Index</h1>
-    <p>Hello, World!</p>
+    <select bind:value={localeSwitcher.locale}>
+        <option value="en">EN</option>
+        <option value="de">DE</option>
+    </select>
     <a href="/about">About</a>
     {#await recipeResult}
         <p>

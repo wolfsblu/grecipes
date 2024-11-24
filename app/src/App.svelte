@@ -10,6 +10,7 @@
     fetchProfile()
         .then(profile => user.login(profile.data))
         .finally(() => router.registerRoutes()) // Routes need to check for logged-in user so we load them after we fetch the profile
+
 </script>
 
 <Page/>

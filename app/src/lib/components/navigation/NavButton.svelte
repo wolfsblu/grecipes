@@ -3,7 +3,7 @@
 
     interface Props {
         icon: Component
-        text: string
+        text?: string
         href: string
     }
 
@@ -24,14 +24,13 @@
         p-2
         rounded-full
         shadow-md
-        sm:px-3
-        sm:py-2
-        sm:rounded-md
         text-orange-700
     "
    {href}>
-    <span class="h-7 w-7 group-active:text-orange-700 group-hover:text-orange-800 text-orange-700">
+    <span class="group-active:text-orange-700 group-hover:text-orange-800 text-orange-700 relative h-7 w-7">
         <Icon/>
     </span>
-    <span class="hidden sm:inline font-semibold">{text}</span>
+    {#if text}
+        <span class="hidden sm:inline font-semibold">{text}</span>
+    {/if}
 </a>
