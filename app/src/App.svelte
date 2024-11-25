@@ -8,7 +8,7 @@
     createUser()
         .fetchProfile()
         .catch(() => {}) // User has no session cookie, that's fine
-        .finally(() => router.registerRoutes()) // Routes need to check for logged-in user so we load them after we fetch the profile
+        .finally(() => router.registerRoutes()) // Router needs to know whether user is logged in
 </script>
 
 <Page/>
