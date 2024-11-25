@@ -1,7 +1,6 @@
 <script lang="ts">
     import Layout from "../Layout.svelte";
     import Navbar from "../lib/components/navigation/Navbar.svelte";
-    import {login} from "../lib/api/client";
     import {createRouter} from "../lib/router.svelte";
     import {createUser} from "../lib/auth/user.svelte";
 
@@ -19,13 +18,8 @@
         e.preventDefault()
         error = null
         try {
-            const response = await login(credentials)
-            if (response.error) {
-                error = response.error as Error
-            } else {
-                user.login(response.data)
-                router.redirectToNext()
-            }
+            await user.login(credentials)
+            router.redirectToNext()
         } catch (e) {
             error = e as Error
         }
