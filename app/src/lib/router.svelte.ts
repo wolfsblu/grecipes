@@ -13,14 +13,15 @@ let page: Component | null = $state(null);
 const user = createUser()
 
 export const createRouter = () => {
-    const redirectToHome = () => router.redirect("/")
-    const redirectToLogin = () => router.redirect("/login")
+    const redirect = (to: string) => router.redirect(to)
+    const redirectToHome = () => redirect("/")
+    const redirectToLogin = (nextRoute: string) => redirect(`/login?next=${encodeURIComponent(nextRoute)}`)
 
-    const requireLogin: Callback = async (_, next) => {
+    const requireLogin: Callback = async (ctx, next) => {
         if (user.profile) {
             next()
         } else {
-            redirectToLogin()
+            redirectToLogin(ctx.path)
         }
     }
 
@@ -49,10 +50,12 @@ export const createRouter = () => {
         router.start()
     }
 
+
     return {
         get page() {
             return page
         },
+        redirect,
         registerRoutes,
     }
 }

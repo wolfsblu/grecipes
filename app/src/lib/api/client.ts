@@ -3,12 +3,6 @@ import type {paths} from "../../../api";
 
 const client = createClient<paths>({baseUrl: "/api/"})
 
-export interface Recipe {
-    name: string
-    servings: number | null
-    minutes: number | null
-}
-
 export const fetchProfile = async () => {
     return client.GET("/user/profile/")
 }
@@ -23,6 +17,15 @@ export const createRecipe = (recipe: Recipe) => {
             name: recipe.name,
             minutes: recipe.minutes,
             servings: recipe.servings,
+        }
+    })
+}
+
+export const login = (credentials: Credentials) => {
+    return client.POST("/login", {
+        body: {
+            email: credentials.email,
+            password: credentials.password,
         }
     })
 }
