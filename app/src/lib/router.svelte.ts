@@ -8,14 +8,25 @@ import NotFound from "../pages/errors/404.svelte"
 import Register from "../pages/Register.svelte";
 import {createUser} from "./auth/user.svelte";
 
-let page: Component | null = $state(null);
 
 const user = createUser()
 
+let page: Component | null = $state(null);
+
+
 export const createRouter = () => {
+    const nextParam = "next"
+
     const redirect = (to: string) => router.redirect(to)
     const redirectToHome = () => redirect("/")
-    const redirectToLogin = (nextRoute: string) => redirect(`/login?next=${encodeURIComponent(nextRoute)}`)
+    const redirectToLogin = (nextRoute: string) => redirect(`/login?${nextParam}=${encodeURIComponent(nextRoute)}`)
+    const redirectToNext = () => {
+        const queryParams = new URLSearchParams(window.location.search)
+        const next = queryParams.get(nextParam)
+        if (next) {
+            router.redirect(next)
+        }
+    }
 
     const requireLogin: Callback = async (ctx, next) => {
         if (user.profile) {
@@ -55,7 +66,7 @@ export const createRouter = () => {
         get page() {
             return page
         },
-        redirect,
+        redirectToNext,
         registerRoutes,
     }
 }

@@ -24,14 +24,10 @@
                 error = response.error as Error
             } else {
                 user.login(response.data)
+                router.redirectToNext()
             }
         } catch (e) {
             error = e as Error
-        }
-        const queryParams = new URLSearchParams(window.location.search)
-        const next = queryParams.get("next")
-        if (next) {
-            router.redirect(next)
         }
     }
 </script>
