@@ -7,7 +7,7 @@ import (
 
 func RegisterApi(mux *http.ServeMux, apiServer http.Handler) {
 	mux.Handle("/api/docs/", swagger.New("OpenAPI Docs", "/api/openapi.yml", "/api/docs/"))
-	mux.Handle("/api/", http.StripPrefix("/api", apiServer))
+	mux.Handle("/api/", cors(http.StripPrefix("/api", apiServer)))
 	mux.HandleFunc("/api/openapi.yml", apiDocs)
 }
 
