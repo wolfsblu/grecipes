@@ -182,7 +182,7 @@ components:
         email:
           type: string
           examples:
-            - Spaghetti Carbonara
+            - test@example.com
         password:
           type: string
           examples:
