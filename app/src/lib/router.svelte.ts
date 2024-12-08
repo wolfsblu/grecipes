@@ -22,7 +22,7 @@ export const createRouter = () => {
     const redirectToLogin = (nextRoute: string) => redirect(`/login?${nextParam}=${encodeURIComponent(nextRoute)}`)
     const redirectToNext = () => {
         const queryParams = new URLSearchParams(window.location.search)
-        const next = queryParams.get(nextParam)
+        const next = queryParams.get(nextParam) || "/"
         if (next) {
             router.redirect(next)
         }
