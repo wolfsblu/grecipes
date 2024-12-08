@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/wolfsblu/go-chef/api"
 	"github.com/wolfsblu/go-chef/db"
+	"github.com/wolfsblu/go-chef/domain"
 	"github.com/wolfsblu/go-chef/env"
 	"github.com/wolfsblu/go-chef/handlers"
 	"github.com/wolfsblu/go-chef/routes"
@@ -19,9 +20,11 @@ func main() {
 		log.Fatalln("failed to connect to the database", err)
 	}
 
-	recipes := handlers.NewRecipeHandler(query)
-	security := handlers.NewSecurityHandler(query)
-	apiServer, err := api.NewServer(recipes, security)
+	store := &db.SqliteStore{DB: query}
+	recipeService := domain.NewRecipeService(store)
+	rh := handlers.NewRecipeHandler(recipeService)
+	sh := handlers.NewSecurityHandler(recipeService)
+	apiServer, err := api.NewServer(rh, sh)
 	if err != nil {
 		log.Fatalln("failed to start api server:", err)
 	}

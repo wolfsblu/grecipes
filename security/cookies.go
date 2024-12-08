@@ -14,7 +14,7 @@ func NewSessionCookie(userId int64) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	expiry := 7 * 24 * 60 * 60 * time.Second // One week
+	expiry := 7 * 24 * time.Hour // One week
 	return fmt.Sprintf(
 		"%s=%s; HttpOnly; Secure; SameSite=strict; Path=/; Max-Age=%d", CookieName, payload, int64(expiry/time.Second),
 	), nil

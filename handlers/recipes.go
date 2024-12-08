@@ -3,26 +3,25 @@ package handlers
 import (
 	"context"
 	"github.com/wolfsblu/go-chef/api"
-	"github.com/wolfsblu/go-chef/db"
+	"github.com/wolfsblu/go-chef/domain"
 )
 
 type RecipeHandler struct {
-	DB *db.Queries
+	Recipes *domain.RecipeService
 }
 
-func NewRecipeHandler(query *db.Queries) *RecipeHandler {
+func NewRecipeHandler(service *domain.RecipeService) *RecipeHandler {
 	return &RecipeHandler{
-		DB: query,
+		Recipes: service,
 	}
 }
 
 func (h *RecipeHandler) AddRecipe(ctx context.Context, req *api.WriteRecipe) (*api.ReadRecipe, error) {
-	user := ctx.Value(ctxKeyUser).(*db.User)
-	payload := db.CreateRecipeParams{
+	user := ctx.Value(ctxKeyUser).(*domain.User)
+	recipe, err := h.Recipes.Add(ctx, domain.RecipeDetails{
 		Name:      req.Name,
-		CreatedBy: user.ID,
-	}
-	recipe, err := h.DB.CreateRecipe(ctx, payload)
+		CreatedBy: user,
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -33,7 +32,7 @@ func (h *RecipeHandler) AddRecipe(ctx context.Context, req *api.WriteRecipe) (*a
 }
 
 func (h *RecipeHandler) DeleteRecipe(ctx context.Context, params api.DeleteRecipeParams) error {
-	err := h.DB.DeleteRecipe(ctx, params.RecipeId)
+	err := h.Recipes.Delete(ctx, params.RecipeId)
 	if err != nil {
 		return err
 	}
@@ -41,8 +40,8 @@ func (h *RecipeHandler) DeleteRecipe(ctx context.Context, params api.DeleteRecip
 }
 
 func (h *RecipeHandler) GetRecipes(ctx context.Context) ([]api.ReadRecipe, error) {
-	user := ctx.Value(ctxKeyUser).(*db.User)
-	recipes, err := h.DB.ListRecipes(ctx, user.ID)
+	user := ctx.Value(ctxKeyUser).(*domain.User)
+	recipes, err := h.Recipes.GetByUser(ctx, user)
 	if err != nil {
 		return nil, err
 	}
@@ -57,9 +56,9 @@ func (h *RecipeHandler) GetRecipes(ctx context.Context) ([]api.ReadRecipe, error
 }
 
 func (h *RecipeHandler) GetRecipeById(ctx context.Context, params api.GetRecipeByIdParams) (*api.ReadRecipe, error) {
-	recipe, err := h.DB.GetRecipe(ctx, params.RecipeId)
+	recipe, err := h.Recipes.GetById(ctx, params.RecipeId)
 	if err != nil {
-		return nil, &ErrRecipeNotFound
+		return nil, &domain.ErrRecipeNotFound
 	}
 	return &api.ReadRecipe{
 		ID:   recipe.ID,
