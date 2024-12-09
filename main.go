@@ -18,12 +18,12 @@ func main() {
 	dbPath := env.MustGet("DB_PATH")
 	query, err := db.Connect(dbPath)
 	if err != nil {
-		log.Fatalln("failed to connect to the database", err)
+		log.Fatalln("failed to connect to the database:", err)
 	}
 
 	err = db.Migrate(fmt.Sprintf("sqlite://%s", dbPath))
 	if err != nil {
-		log.Fatalln("failed to apply database migrations", err)
+		log.Fatalln("failed to apply database migrations:", err)
 	}
 
 	store := &db.SqliteStore{DB: query}
