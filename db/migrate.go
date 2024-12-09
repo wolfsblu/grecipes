@@ -4,7 +4,6 @@ import (
 	"ariga.io/atlas-go-sdk/atlasexec"
 	"context"
 	"embed"
-	"log"
 )
 
 //go:embed migrations
@@ -26,15 +25,12 @@ func Migrate(dbUrl string) error {
 		return err
 	}
 
-	res, err := client.MigrateApply(context.Background(), &atlasexec.MigrateApplyParams{
+	_, err = client.MigrateApply(context.Background(), &atlasexec.MigrateApplyParams{
 		URL: dbUrl,
 	})
 	if err != nil {
 		return err
 	}
 
-	if len(res.Applied) > 0 {
-		log.Printf("applied %d migrations\n", len(res.Applied))
-	}
 	return nil
 }

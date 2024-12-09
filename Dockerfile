@@ -19,9 +19,11 @@ RUN go generate -v \
 
 FROM scratch
 
-COPY --from=docker.io/arigaio/atlas /atlas /bin/atlas
 COPY --from=backend /app/go-chef /bin/go-chef
+# Atlas requires a tmp directory
 COPY --from=backend --chmod=1777 /tmp /tmp
+# Needed to apply migrations
+COPY --from=docker.io/arigaio/atlas /atlas /bin/atlas
 
 ENV PATH="$PATH:/bin"
 
