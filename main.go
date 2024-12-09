@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/wolfsblu/go-chef/api"
 	"github.com/wolfsblu/go-chef/db"
 	"github.com/wolfsblu/go-chef/domain"
@@ -18,6 +19,11 @@ func main() {
 	query, err := db.Connect(dbPath)
 	if err != nil {
 		log.Fatalln("failed to connect to the database", err)
+	}
+
+	err = db.Migrate(fmt.Sprintf("sqlite://%s", dbPath))
+	if err != nil {
+		log.Fatalln("failed to apply database migrations", err)
 	}
 
 	store := &db.SqliteStore{DB: query}
