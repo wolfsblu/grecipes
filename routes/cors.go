@@ -10,6 +10,7 @@ func cors(h http.Handler) http.HandlerFunc {
 		origin, ok := os.LookupEnv("CORS_ORIGIN")
 		if ok {
 			w.Header().Set("Access-Control-Allow-Origin", origin)
+			w.Header().Set("Access-Control-Allow-Credentials", "true")
 		}
 		h.ServeHTTP(w, r)
 	}

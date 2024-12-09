@@ -1,7 +1,10 @@
 import createClient from "openapi-fetch";
 import type {paths} from "../../../api";
 
-const client = createClient<paths>({baseUrl: import.meta.env.VITE_API_HOST})
+const client = createClient<paths>({
+    baseUrl: import.meta.env.VITE_API_HOST,
+    credentials: "include",
+})
 
 export const fetchProfile = async () => {
     return client.GET("/user/profile/")
