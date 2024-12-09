@@ -15,11 +15,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+
+    - name: Set up Node.js
+      working-directory: ./app
+      run: |
+        npm ci
+        npm run build --if-present
 
     - name: Set up Go
       uses: actions/setup-go@v4
       with:
         go-version: '1.23'
+
+    - name: Generate
+      run: go generate -v ./...
 
     - name: Build
       run: go build -v ./...
