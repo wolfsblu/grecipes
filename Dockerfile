@@ -4,8 +4,7 @@ WORKDIR /app
 
 COPY app .
 
-RUN npm ci \
-    && npm run build
+RUN npm ci && npm run build
 
 FROM docker.io/golang:alpine as backend
 
@@ -14,8 +13,7 @@ WORKDIR /app
 COPY . .
 COPY --from=frontend /app/dist ./app/dist
 
-RUN go generate -v \
-    && go build -v
+RUN go generate -v && go build -v
 
 FROM scratch
 
