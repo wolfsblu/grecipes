@@ -1,6 +1,6 @@
 <script lang="ts">
     import {createRecipe, type Recipe} from "../../api/client";
-    import Input from "../../forms/Input.svelte";
+    import Input from "../forms/Input.svelte";
 
     const recipe: Recipe = $state({
         name: '',
