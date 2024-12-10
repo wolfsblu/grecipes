@@ -39,7 +39,7 @@ export const localeSwitcher = {
     }
 }
 
-const translate = (locale: string, key: string, vars?: Record<string, any>) => {
+const translate = (locale: string, key: keyof Translation, vars?: Record<string, any>) => {
     // Let's throw some errors if we're trying to use keys/locales that don't exist.
     // We could improve this by using Typescript and/or fallback values.
     if (!key) throw new Error("no key provided to $t()");
@@ -61,6 +61,6 @@ const translate = (locale: string, key: string, vars?: Record<string, any>) => {
     return text;
 }
 
-export default (key: string, vars?: any) => {
+export default (key: keyof Translation, vars?: any) => {
     return translate(currentLocale, key, vars)
 }
