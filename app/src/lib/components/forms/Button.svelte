@@ -13,7 +13,7 @@
 
 <label>
     <button class="
-    active:bg-orange-50
+    active:bg-orange-100
     active:shadow-inner
     active:text-orange-700
     bg-orange-100
