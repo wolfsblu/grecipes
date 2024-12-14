@@ -3,6 +3,7 @@
 
     interface Props {
         label?: string
+        required?: boolean
         type: HTMLInputTypeAttribute | null | undefined
         value: T
     }

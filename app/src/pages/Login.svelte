@@ -41,8 +41,8 @@
                 <p>{error.message}</p>
             {/if}
             <form onsubmit="{handleSubmit}">
-                <Input label={t("login.labels.email")} type="email" bind:value={credentials.email} />
-                <Input label={t("login.labels.password")} type="password" bind:value={credentials.password} />
+                <Input label={t("login.labels.email")} type="email" bind:value={credentials.email} required={true} />
+                <Input label={t("login.labels.password")} type="password" bind:value={credentials.password} required={true} />
                 <Button type="submit" class="mt-3" icon={LoginIcon}>
                     {t("login.actions.submit")}
                 </Button>
