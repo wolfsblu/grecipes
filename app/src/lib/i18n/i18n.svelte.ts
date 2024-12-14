@@ -13,7 +13,7 @@ interface I18n {
 }
 
 const defaultLocale = "en"
-const supportedLocales = ["de", "en"]
+const supportedLocales = ["de"].concat(defaultLocale)
 const translations: I18n = {en}
 
 const getInitialLocale = () => {
