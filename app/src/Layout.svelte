@@ -10,6 +10,6 @@
 </script>
 
 <Header />
-<main class="p-3">
+<main class="flex flex-col flex-grow flex-wrap items-center justify-center p-3">
     {@render children()}
 </main>

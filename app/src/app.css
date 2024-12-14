@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+html, body, #app {
+    height: 100vh;
+}
+
+#app {
+    display: flex;
+    flex-direction: column;
+}
+
 svg {
     position: absolute;
     top: 0;
