@@ -1,6 +1,4 @@
 import en from './translations.en'
-import de from './translations.de'
-
 
 export interface Language {
     [key: string]: string
@@ -14,12 +12,9 @@ interface I18n {
     [locale: string]: Language
 }
 
-const translations: I18n = {
-    de, en
-}
-
 const defaultLocale = "en"
-const supportedLocales = Object.keys(translations)
+const supportedLocales = ["de", "en"]
+const translations: I18n = {en}
 
 const getInitialLocale = () => {
     if (navigator.language && supportedLocales.indexOf(navigator.language) >= 0) {
@@ -35,22 +30,24 @@ export const localeSwitcher = {
         return currentLocale
     },
     set locale(value) {
-        currentLocale = value
+        if (!(value in translations)) {
+            import(`./translations.${value}.ts`)
+                .then(file => translations[value] = file.default)
+                .then(() => currentLocale = value)
+        } else {
+            currentLocale = value
+        }
     }
 }
 
 const translate = (locale: string, key: keyof Translation, vars?: Record<string, any>) => {
-    // Let's throw some errors if we're trying to use keys/locales that don't exist.
-    // We could improve this by using Typescript and/or fallback values.
     if (!key) throw new Error("no key provided to $t()");
     if (!locale) throw new Error(`no translation for key "${key}"`);
 
-    // Grab the translation from the translations object.
     let text = translations[locale][key];
 
     if (!text) throw new Error(`no translation found for ${locale}.${key}`);
 
-    // Replace any passed in variables in the translation string.
     if (vars) {
         Object.keys(vars).map((k) => {
             const regex = new RegExp(`{{${k}}}`, "g");
