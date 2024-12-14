@@ -1,4 +1,4 @@
-import en from './translations.en'
+import en from './language.en'
 
 export interface Language {
     [key: string]: string
@@ -31,7 +31,7 @@ export const localeSwitcher = {
     },
     set locale(value) {
         if (!(value in translations)) {
-            import(`./translations.${value}.ts`)
+            import(`./translation.${value}.ts`)
                 .then(file => translations[value] = file.default)
                 .then(() => currentLocale = value)
         } else {
