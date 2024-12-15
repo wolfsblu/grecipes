@@ -17,35 +17,41 @@
         password: "",
     })
 
-    let error: Error | null = $state(null)
-
     const handleSubmit = async (e: SubmitEvent) => {
         e.preventDefault()
-        error = null
         try {
             await user.login(credentials)
             router.redirectToNext()
         } catch (e) {
-            error = e as Error
+            // TODO: Show error toast
         }
     }
 </script>
 
 <Layout Header={Navbar}>
-    <div class="border border-gray-200 grid grid-flow-col grid-cols-[1fr_2fr] h-1/2 rounded-md">
-        <div class="bg-center bg-cover rounded-l-md" style="background-image: url({food})">
-        </div>
-        <div class="p-6">
-            <h1 class="font-light mb-3 text-3xl">{t("login.title")}</h1>
-            {#if error}
-                <p>{error.message}</p>
-            {/if}
-            <form onsubmit="{handleSubmit}">
-                <Input label={t("login.labels.email")} type="email" bind:value={credentials.email} required={true} />
-                <Input label={t("login.labels.password")} type="password" bind:value={credentials.password} required={true} />
-                <Button type="submit" class="mt-3" icon={LoginIcon}>
-                    {t("login.actions.submit")}
-                </Button>
+    <div class="flex flex-col flex-wrap h-full items-center justify-center">
+        <div class="grid grid-cols-[1fr_2fr] shadow-lg">
+            <div class="bg-center bg-cover rounded-l-md"
+                 style="background-image: url({food})">
+            </div>
+            <form class="border border-gray-200 grid grid-rows-[auto_min-content] rounded-r-md" onsubmit="{handleSubmit}">
+                <div class="p-6">
+                    <h1 class="font-light mb-3 text-3xl">{t("login.title")}</h1>
+                    <Input class="mb-3" label={t("login.labels.email")} type="email" bind:value={credentials.email} required={true}/>
+                    <Input label={t("login.labels.password")} type="password" bind:value={credentials.password} required={true}/>
+                    <p class="text-sm">
+                        {@html t("login.help.resetPassword", {
+                            class: "hover:no-underline hover:text-blue-500 text-blue-600 underline",
+                            url: "/"
+                        })}
+                    </p>
+                </div>
+
+                <div class="p-6">
+                    <Button type="submit" class="mt-3" icon={LoginIcon}>
+                        {t("login.actions.submit")}
+                    </Button>
+                </div>
             </form>
         </div>
     </div>
