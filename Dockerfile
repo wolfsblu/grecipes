@@ -13,7 +13,7 @@ WORKDIR /app
 COPY . .
 COPY --from=frontend /app/dist ./app/dist
 
-RUN go generate -v && go build -v
+RUN --mount=type=cache,target=/go/pkg/mod go generate && go build
 
 FROM scratch
 
