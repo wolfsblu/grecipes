@@ -29,14 +29,15 @@
 </script>
 
 <Layout Header={Navbar}>
-    <div class="flex flex-col flex-wrap h-full items-center justify-center">
-        <div class="grid grid-cols-[1fr_2fr] shadow-lg">
+    <div class="flex flex-col flex-wrap md:h-full items-center justify-center">
+        <div class="md:grid grid-cols-[1fr_2fr] md:shadow-lg">
             <div class="bg-center bg-cover rounded-l-md"
                  style="background-image: url({food})">
             </div>
-            <form class="border border-gray-200 grid grid-rows-[auto_min-content] rounded-r-md" onsubmit="{handleSubmit}">
+            <form class="md:border border-gray-200 grid grid-rows-[auto_min-content] rounded-r-md" onsubmit="{handleSubmit}">
                 <div class="p-6">
                     <h1 class="font-light mb-3 text-3xl">{t("login.title")}</h1>
+                    <p class="mb-3">{t("login.subtitle")}</p>
                     <Input class="mb-3" label={t("login.labels.email")} type="email" bind:value={credentials.email} required={true}/>
                     <Input label={t("login.labels.password")} type="password" bind:value={credentials.password} required={true}/>
                     <p class="text-sm">
@@ -47,7 +48,7 @@
                     </p>
                 </div>
 
-                <div class="p-6">
+                <div class="p-6 pt-0">
                     <Button type="submit" class="mt-3" icon={LoginIcon}>
                         {t("login.actions.submit")}
                     </Button>
