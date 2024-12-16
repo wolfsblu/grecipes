@@ -4,7 +4,10 @@ WORKDIR /app
 
 COPY app .
 
-RUN npm ci && npm run build
+RUN --mount=type=cache,target=/app/.npm \
+    npm set cache /app/.npm && \
+    npm ci && \
+    npm run build
 
 FROM docker.io/golang:alpine as backend
 
