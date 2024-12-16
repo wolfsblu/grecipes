@@ -3,10 +3,11 @@ package main
 import (
 	"fmt"
 	"github.com/wolfsblu/go-chef/api"
-	"github.com/wolfsblu/go-chef/db"
 	"github.com/wolfsblu/go-chef/domain"
 	"github.com/wolfsblu/go-chef/env"
-	"github.com/wolfsblu/go-chef/handlers"
+	"github.com/wolfsblu/go-chef/infra/handlers"
+	"github.com/wolfsblu/go-chef/infra/smtp"
+	"github.com/wolfsblu/go-chef/infra/sqlite"
 	"github.com/wolfsblu/go-chef/routes"
 	"log"
 	"net/http"
@@ -16,18 +17,20 @@ func main() {
 	env.Load()
 
 	dbPath := env.MustGet("DB_PATH")
-	query, err := db.Connect(dbPath)
+	query, err := sqlite.Connect(dbPath)
 	if err != nil {
 		log.Fatalln("failed to connect to the database:", err)
 	}
 
-	err = db.Migrate(fmt.Sprintf("sqlite://%s", dbPath))
+	err = sqlite.Migrate(fmt.Sprintf("sqlite://%s", dbPath))
 	if err != nil {
 		log.Fatalln("failed to apply database migrations:", err)
 	}
 
-	store := &db.SqliteStore{DB: query}
-	recipeService := domain.NewRecipeService(store)
+	recipeService := domain.NewRecipeService(
+		&sqlite.Store{DB: query},
+		&smtp.Mailer{},
+	)
 	rh := handlers.NewRecipeHandler(recipeService)
 	sh := handlers.NewSecurityHandler(recipeService)
 	apiServer, err := api.NewServer(rh, sh)

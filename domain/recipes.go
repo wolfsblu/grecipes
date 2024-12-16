@@ -5,7 +5,8 @@ import (
 )
 
 type RecipeService struct {
-	Store RecipeStore
+	Sender NotificationSender
+	Store  RecipeStore
 }
 
 type RecipeDetails struct {
@@ -18,8 +19,8 @@ type Recipe struct {
 	RecipeDetails
 }
 
-func NewRecipeService(store RecipeStore) *RecipeService {
-	return &RecipeService{Store: store}
+func NewRecipeService(store RecipeStore, sender NotificationSender) *RecipeService {
+	return &RecipeService{Store: store, Sender: sender}
 }
 
 func (s *RecipeService) Add(ctx context.Context, r RecipeDetails) (Recipe, error) {

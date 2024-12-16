@@ -16,10 +16,6 @@ type User struct {
 	Credentials
 }
 
-func (s *RecipeService) RegisterUser(ctx context.Context, credentials Credentials) (User, error) {
-	return s.Store.CreateUser(ctx, credentials)
-}
-
 func (s *RecipeService) GenerateSessionCookie(user User) (string, error) {
 	cookie, err := security.NewSessionCookie(user.ID)
 	if err != nil {
@@ -34,6 +30,19 @@ func (s *RecipeService) GetUserById(ctx context.Context, id int64) (User, error)
 
 func (s *RecipeService) GetUserByEmail(ctx context.Context, email string) (User, error) {
 	return s.Store.GetUserByEmail(ctx, email)
+}
+
+func (s *RecipeService) RegisterUser(ctx context.Context, credentials Credentials) (User, error) {
+	return s.Store.CreateUser(ctx, credentials)
+}
+
+func (s *RecipeService) ResetPasswordByEmail(ctx context.Context, email string) error {
+	// TODO: Implement
+	_, err := s.Store.GetUserByEmail(ctx, email)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (s *RecipeService) VerifyPassword(user User, password string) error {

@@ -1,4 +1,4 @@
-package db
+package sqlite
 
 import (
 	"ariga.io/atlas-go-sdk/atlasexec"

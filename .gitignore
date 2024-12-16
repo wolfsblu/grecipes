@@ -3,9 +3,9 @@
 tmp
 
 # sqlc artifacts
-/db/db.go
-/db/models.go
-/db/*.sql.go
+/infra/sqlite/db.go
+/infra/sqlite/models.go
+/infra/sqlite/*.sql.go
 
 .env*
 !.env.example

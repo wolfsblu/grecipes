@@ -1,4 +1,4 @@
-package db
+package sqlite
 
 import "github.com/wolfsblu/go-chef/domain"
 

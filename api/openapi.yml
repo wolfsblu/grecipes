@@ -60,6 +60,30 @@ paths:
           $ref: '#/components/responses/User'
         default:
           $ref: '#/components/responses/Error'
+  /reset-password:
+    post:
+      tags:
+        - User
+      security: []
+      summary: Reset password for an existing user
+      operationId: resetPassword
+      requestBody:
+        description: The new user credentials
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+              required:
+                - email
+      responses:
+        '204':
+          description: Successful operation
+        default:
+          $ref: '#/components/responses/Error'
   /user/profile/:
     get:
       tags:
@@ -166,7 +190,8 @@ components:
       description: Sets the session for the logged in user
       schema:
         type: string
-        example: SESSID=123; Path=/; HttpOnly
+        examples:
+          - SESSID=123; Path=/; HttpOnly
   securitySchemes:
     cookieAuth:
       type: apiKey

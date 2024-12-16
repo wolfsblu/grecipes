@@ -2,7 +2,7 @@
 env "local" {
   // Declare where the schema definition resides.
   // Also supported: ["file://multi.hcl", "file://schema.hcl"].
-  src = "file://db/schema.sql"
+  src = "file://infra/sqlite/schema.sql"
 
   // Define the URL of the database which is managed
   // in this environment.
@@ -13,6 +13,6 @@ env "local" {
   dev = "sqlite://dev?mode=memory"
 
   migration {
-    dir = "file://db/migrations"
+    dir = "file://infra/sqlite/migrations"
   }
 }

@@ -69,3 +69,7 @@ func (h *RecipeHandler) GetUserProfile(ctx context.Context) (*api.ReadUser, erro
 		Email: user.Email,
 	}, nil
 }
+
+func (h *RecipeHandler) ResetPassword(ctx context.Context, req *api.ResetPasswordReq) error {
+	return h.Recipes.ResetPasswordByEmail(ctx, req.Email)
+}

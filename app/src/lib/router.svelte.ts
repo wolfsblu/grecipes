@@ -48,7 +48,7 @@ export const createRouter = () => {
         router("/login", requireGuest, setPage(async () => (await import("../pages/auth/Login.svelte")).default))
         router("/recipes/create", requireLogin, setPage(async () => (await import("../pages/recipes/Create.svelte")).default))
         router("/register", requireGuest, setPage(async () => (await import("../pages/auth/Register.svelte")).default))
-        router("/reset-password", requireGuest, setPage(async () => (await import("../pages/auth/Reset.svelte")).default))
+        router("/forgot-password", requireGuest, setPage(async () => (await import("../pages/auth/ForgotPassword.svelte")).default))
         router("*", setPage(async () => (await import("../pages/errors/404.svelte")).default))
 
         router.start()

@@ -1,4 +1,4 @@
-package db
+package sqlite
 
 import (
 	"context"
@@ -15,11 +15,11 @@ func Connect(path string) (*Queries, error) {
 	return New(con), nil
 }
 
-type SqliteStore struct {
+type Store struct {
 	DB *Queries
 }
 
-func (s *SqliteStore) CreateRecipe(ctx context.Context, r domain.RecipeDetails) (recipe domain.Recipe, _ error) {
+func (s *Store) CreateRecipe(ctx context.Context, r domain.RecipeDetails) (recipe domain.Recipe, _ error) {
 	payload := CreateRecipeParams{
 		Name:      r.Name,
 		CreatedBy: r.CreatedBy.ID,
@@ -33,7 +33,7 @@ func (s *SqliteStore) CreateRecipe(ctx context.Context, r domain.RecipeDetails) 
 	return result.AsDomainModel(), nil
 }
 
-func (s *SqliteStore) CreateUser(ctx context.Context, credentials domain.Credentials) (user domain.User, _ error) {
+func (s *Store) CreateUser(ctx context.Context, credentials domain.Credentials) (user domain.User, _ error) {
 	result, err := s.DB.CreateUser(ctx, CreateUserParams{
 		Email:        credentials.Email,
 		PasswordHash: credentials.PasswordHash,
@@ -44,11 +44,11 @@ func (s *SqliteStore) CreateUser(ctx context.Context, credentials domain.Credent
 	return result.AsDomainModel(), nil
 }
 
-func (s *SqliteStore) DeleteRecipe(ctx context.Context, id int64) error {
+func (s *Store) DeleteRecipe(ctx context.Context, id int64) error {
 	return s.DB.DeleteRecipe(ctx, id)
 }
 
-func (s *SqliteStore) GetRecipeById(ctx context.Context, id int64) (recipe domain.Recipe, _ error) {
+func (s *Store) GetRecipeById(ctx context.Context, id int64) (recipe domain.Recipe, _ error) {
 	result, err := s.DB.GetRecipe(ctx, id)
 	if err != nil {
 		return recipe, err
@@ -56,7 +56,7 @@ func (s *SqliteStore) GetRecipeById(ctx context.Context, id int64) (recipe domai
 	return result.AsDomainModel(), nil
 }
 
-func (s *SqliteStore) GetRecipesByUser(ctx context.Context, user *domain.User) (recipes []domain.Recipe, _ error) {
+func (s *Store) GetRecipesByUser(ctx context.Context, user *domain.User) (recipes []domain.Recipe, _ error) {
 	result, err := s.DB.ListRecipes(ctx, user.ID)
 	if err != nil {
 		return nil, err
@@ -68,7 +68,7 @@ func (s *SqliteStore) GetRecipesByUser(ctx context.Context, user *domain.User) (
 	return recipes, nil
 }
 
-func (s *SqliteStore) GetUserByEmail(ctx context.Context, email string) (user domain.User, _ error) {
+func (s *Store) GetUserByEmail(ctx context.Context, email string) (user domain.User, _ error) {
 	result, err := s.DB.GetUserByEmail(ctx, email)
 	if err != nil {
 		return user, err
@@ -76,7 +76,7 @@ func (s *SqliteStore) GetUserByEmail(ctx context.Context, email string) (user do
 	return result.AsDomainModel(), nil
 }
 
-func (s *SqliteStore) GetUserById(ctx context.Context, id int64) (user domain.User, _ error) {
+func (s *Store) GetUserById(ctx context.Context, id int64) (user domain.User, _ error) {
 	result, err := s.DB.GetUser(ctx, id)
 	if err != nil {
 		return user, err
