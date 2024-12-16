@@ -3,19 +3,19 @@
 @tailwind utilities;
 
 html, body, #app {
-    height: 100vh;
+    @apply h-screen;
 }
 
 #app {
-    display: flex;
-    flex-direction: column;
+    @apply flex flex-col;
 }
 
-svg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    display: block;
-    width: 100%;
-    height: 100%;
+p a:link, p a:visited {
+    @apply text-blue-500 underline;
+}
+p a:active, p a:hover {
+    @apply text-blue-400 no-underline;
+}
+p a:active {
+    @apply text-blue-500;
 }

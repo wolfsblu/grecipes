@@ -34,16 +34,22 @@
             <div class="bg-center bg-cover rounded-l-md"
                  style="background-image: url({food})">
             </div>
-            <form class="md:border border-gray-200 grid grid-rows-[auto_min-content] rounded-r-md" onsubmit="{handleSubmit}">
+            <form class="md:border border-gray-200 grid grid-rows-[auto_min-content] rounded-r-md"
+                  onsubmit="{handleSubmit}">
                 <div class="p-6">
                     <h1 class="font-light mb-3 text-3xl">{t("login.title")}</h1>
-                    <p class="mb-3">{t("login.subtitle")}</p>
-                    <Input class="mb-3" label={t("login.labels.email")} type="email" bind:value={credentials.email} required={true}/>
-                    <Input class="mb-3" label={t("login.labels.password")} type="password" bind:value={credentials.password} required={true}/>
+                    <p class="mb-3">
+                        {@html t("login.subtitle", {
+                            url: '/register',
+                        })}
+                    </p>
+                    <Input class="mb-3" label={t("login.labels.email")} type="email" bind:value={credentials.email}
+                           required={true}/>
+                    <Input label={t("login.labels.password")} type="password"
+                           bind:value={credentials.password} required={true}/>
                     <p class="text-sm">
                         {@html t("login.help.resetPassword", {
-                            class: "hover:no-underline hover:text-blue-500 text-blue-600 underline",
-                            url: "/forgot-password"
+                            url: "/forgot-password",
                         })}
                     </p>
                 </div>

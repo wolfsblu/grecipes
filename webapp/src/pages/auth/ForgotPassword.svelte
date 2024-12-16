@@ -38,7 +38,7 @@
                 <div class="p-6">
                     <h1 class="font-light mb-3 text-3xl">{t("forgot-password.title")}</h1>
                     <p class="mb-3">{t("forgot-password.subtitle")}</p>
-                    <Input class="mb-3" label={t("login.labels.email")} type="email" bind:value={credentials.email} required={true}/>
+                    <Input label={t("login.labels.email")} type="email" bind:value={credentials.email} required={true}/>
                     <p class="text-sm">
                         {@html t("forgot-password.help.email", {
                             class: "hover:no-underline hover:text-blue-500 text-blue-600 underline",
