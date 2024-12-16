@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"github.com/wolfsblu/go-chef/api"
 	"github.com/wolfsblu/go-chef/domain"
-	"github.com/wolfsblu/go-chef/env"
+	"github.com/wolfsblu/go-chef/infra/env"
 	"github.com/wolfsblu/go-chef/infra/handlers"
+	"github.com/wolfsblu/go-chef/infra/routing"
 	"github.com/wolfsblu/go-chef/infra/smtp"
 	"github.com/wolfsblu/go-chef/infra/sqlite"
-	"github.com/wolfsblu/go-chef/routes"
 	"log"
 	"net/http"
 )
@@ -39,8 +39,8 @@ func main() {
 	}
 
 	mux := http.NewServeMux()
-	routes.RegisterApp(mux)
-	routes.RegisterApi(mux, apiServer)
+	routing.RegisterApp(mux)
+	routing.RegisterApi(mux, apiServer)
 
 	host := env.MustGet("HOST")
 	err = http.ListenAndServe(host, mux)

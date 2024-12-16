@@ -3,7 +3,7 @@ package security
 import (
 	"fmt"
 	"github.com/gorilla/securecookie"
-	"github.com/wolfsblu/go-chef/env"
+	"github.com/wolfsblu/go-chef/infra/env"
 	"time"
 )
 

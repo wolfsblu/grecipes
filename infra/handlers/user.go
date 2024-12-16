@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/wolfsblu/go-chef/api"
 	"github.com/wolfsblu/go-chef/domain"
-	"github.com/wolfsblu/go-chef/security"
+	security2 "github.com/wolfsblu/go-chef/infra/security"
 )
 
 func (h *RecipeHandler) Login(ctx context.Context, req *api.Credentials) (r *api.AuthenticatedUserHeaders, _ error) {
@@ -35,7 +35,7 @@ func (h *RecipeHandler) Login(ctx context.Context, req *api.Credentials) (r *api
 }
 
 func (h *RecipeHandler) Logout(_ context.Context) (*api.LogoutOK, error) {
-	cookie := security.ExpireSessionCookie()
+	cookie := security2.ExpireSessionCookie()
 	return &api.LogoutOK{
 		SetCookie: api.OptString{
 			Set:   true,
@@ -45,7 +45,7 @@ func (h *RecipeHandler) Logout(_ context.Context) (*api.LogoutOK, error) {
 }
 
 func (h *RecipeHandler) Register(ctx context.Context, c *api.Credentials) (*api.ReadUser, error) {
-	hash, err := security.CreateHash(c.Password, security.DefaultHashParams)
+	hash, err := security2.CreateHash(c.Password, security2.DefaultHashParams)
 	if err != nil {
 		return nil, fmt.Errorf("%w: %w", &domain.ErrSecurity, err)
 	}

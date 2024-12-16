@@ -1,4 +1,4 @@
-package routes
+package routing
 
 import (
 	swagger "github.com/swaggest/swgui/v5emb"

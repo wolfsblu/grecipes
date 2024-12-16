@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/wolfsblu/go-chef/api"
 	"github.com/wolfsblu/go-chef/domain"
-	"github.com/wolfsblu/go-chef/security"
+	"github.com/wolfsblu/go-chef/infra/security"
 )
 
 type contextKey string

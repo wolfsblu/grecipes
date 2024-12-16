@@ -1,4 +1,4 @@
-package routes
+package routing
 
 import (
 	"github.com/wolfsblu/go-chef/app"
