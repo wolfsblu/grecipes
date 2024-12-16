@@ -25,20 +25,20 @@ func (s *RecipeService) GenerateSessionCookie(user User) (string, error) {
 }
 
 func (s *RecipeService) GetUserById(ctx context.Context, id int64) (User, error) {
-	return s.Store.GetUserById(ctx, id)
+	return s.store.GetUserById(ctx, id)
 }
 
 func (s *RecipeService) GetUserByEmail(ctx context.Context, email string) (User, error) {
-	return s.Store.GetUserByEmail(ctx, email)
+	return s.store.GetUserByEmail(ctx, email)
 }
 
 func (s *RecipeService) RegisterUser(ctx context.Context, credentials Credentials) (User, error) {
-	return s.Store.CreateUser(ctx, credentials)
+	return s.store.CreateUser(ctx, credentials)
 }
 
 func (s *RecipeService) ResetPasswordByEmail(ctx context.Context, email string) error {
 	// TODO: Implement
-	_, err := s.Store.GetUserByEmail(ctx, email)
+	_, err := s.store.GetUserByEmail(ctx, email)
 	if err != nil {
 		return err
 	}

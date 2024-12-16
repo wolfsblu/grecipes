@@ -1,9 +1,13 @@
 package main
 
 import (
-	"github.com/wolfsblu/go-chef/factories"
+	"github.com/wolfsblu/go-chef/api"
+	"github.com/wolfsblu/go-chef/domain"
 	"github.com/wolfsblu/go-chef/infra/env"
+	"github.com/wolfsblu/go-chef/infra/handlers"
 	"github.com/wolfsblu/go-chef/infra/routing"
+	"github.com/wolfsblu/go-chef/infra/smtp"
+	"github.com/wolfsblu/go-chef/infra/sqlite"
 	"log"
 	"net/http"
 )
@@ -11,16 +15,26 @@ import (
 func main() {
 	env.Load()
 
-	apiServer, err := factories.NewApiServer()
+	notifier := smtp.NewSMTPMailer()
+	store, err := sqlite.NewSqliteStore(env.MustGet("DB_PATH"))
+	if err != nil {
+		log.Fatalln("failed to initialize sqlite connection:", err)
+	}
+	err = store.Migrate()
+	if err != nil {
+		log.Fatalln("failed to apply database migrations:", err)
+	}
+
+	recipeService := domain.NewRecipeService(notifier, store)
+	rh := handlers.NewRecipeHandler(recipeService)
+	sh := handlers.NewSecurityHandler(recipeService)
+	apiServer, err := api.NewServer(rh, sh)
 	if err != nil {
 		log.Fatalln("failed to start api server:", err)
 	}
 
-	mux := http.NewServeMux()
-	routing.RegisterApp(mux)
-	routing.RegisterApi(mux, apiServer)
-
 	host := env.MustGet("HOST")
+	mux := routing.NewServeMux(apiServer)
 	err = http.ListenAndServe(host, mux)
 	if err != nil {
 		log.Fatalln("failed to start web server:", err)

@@ -1,22 +1,45 @@
 package sqlite
 
 import (
+	"ariga.io/atlas-go-sdk/atlasexec"
 	"context"
-	"database/sql"
+	"fmt"
 	"github.com/wolfsblu/go-chef/domain"
+	"io/fs"
 	_ "modernc.org/sqlite"
 )
 
-func Connect(path string) (*Queries, error) {
-	con, err := sql.Open("sqlite", path)
-	if err != nil {
-		return nil, err
-	}
-	return New(con), nil
+type Store struct {
+	db   *Queries
+	path string
 }
 
-type Store struct {
-	DB *Queries
+func (s *Store) Migrate() error {
+	subFS, err := fs.Sub(migrationFS, "migrations")
+	if err != nil {
+		return err
+	}
+
+	workdir, err := atlasexec.NewWorkingDir(
+		atlasexec.WithMigrations(subFS),
+	)
+	if err != nil {
+		return err
+	}
+
+	defer func(workdir *atlasexec.WorkingDir) {
+		err = workdir.Close()
+	}(workdir)
+
+	client, err := atlasexec.NewClient(workdir.Path(), "atlas")
+	if err != nil {
+		return err
+	}
+
+	_, err = client.MigrateApply(context.Background(), &atlasexec.MigrateApplyParams{
+		URL: fmt.Sprintf("sqlite://%s", s.path),
+	})
+	return err
 }
 
 func (s *Store) CreateRecipe(ctx context.Context, r domain.RecipeDetails) (recipe domain.Recipe, _ error) {
@@ -25,7 +48,7 @@ func (s *Store) CreateRecipe(ctx context.Context, r domain.RecipeDetails) (recip
 		CreatedBy: r.CreatedBy.ID,
 	}
 
-	result, err := s.DB.CreateRecipe(ctx, payload)
+	result, err := s.db.CreateRecipe(ctx, payload)
 	if err != nil {
 		return recipe, err
 	}
@@ -34,7 +57,7 @@ func (s *Store) CreateRecipe(ctx context.Context, r domain.RecipeDetails) (recip
 }
 
 func (s *Store) CreateUser(ctx context.Context, credentials domain.Credentials) (user domain.User, _ error) {
-	result, err := s.DB.CreateUser(ctx, CreateUserParams{
+	result, err := s.db.CreateUser(ctx, CreateUserParams{
 		Email:        credentials.Email,
 		PasswordHash: credentials.PasswordHash,
 	})
@@ -45,11 +68,11 @@ func (s *Store) CreateUser(ctx context.Context, credentials domain.Credentials) 
 }
 
 func (s *Store) DeleteRecipe(ctx context.Context, id int64) error {
-	return s.DB.DeleteRecipe(ctx, id)
+	return s.db.DeleteRecipe(ctx, id)
 }
 
 func (s *Store) GetRecipeById(ctx context.Context, id int64) (recipe domain.Recipe, _ error) {
-	result, err := s.DB.GetRecipe(ctx, id)
+	result, err := s.db.GetRecipe(ctx, id)
 	if err != nil {
 		return recipe, err
 	}
@@ -57,7 +80,7 @@ func (s *Store) GetRecipeById(ctx context.Context, id int64) (recipe domain.Reci
 }
 
 func (s *Store) GetRecipesByUser(ctx context.Context, user *domain.User) (recipes []domain.Recipe, _ error) {
-	result, err := s.DB.ListRecipes(ctx, user.ID)
+	result, err := s.db.ListRecipes(ctx, user.ID)
 	if err != nil {
 		return nil, err
 	}
@@ -69,7 +92,7 @@ func (s *Store) GetRecipesByUser(ctx context.Context, user *domain.User) (recipe
 }
 
 func (s *Store) GetUserByEmail(ctx context.Context, email string) (user domain.User, _ error) {
-	result, err := s.DB.GetUserByEmail(ctx, email)
+	result, err := s.db.GetUserByEmail(ctx, email)
 	if err != nil {
 		return user, err
 	}
@@ -77,7 +100,7 @@ func (s *Store) GetUserByEmail(ctx context.Context, email string) (user domain.U
 }
 
 func (s *Store) GetUserById(ctx context.Context, id int64) (user domain.User, _ error) {
-	result, err := s.DB.GetUser(ctx, id)
+	result, err := s.db.GetUser(ctx, id)
 	if err != nil {
 		return user, err
 	}
