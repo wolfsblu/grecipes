@@ -35,8 +35,5 @@ func Migrate(dbUrl string) (err error) {
 	_, err = client.MigrateApply(context.Background(), &atlasexec.MigrateApplyParams{
 		URL: dbUrl,
 	})
-	if err != nil {
-		return err
-	}
 	return err
 }
