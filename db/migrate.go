@@ -4,20 +4,27 @@ import (
 	"ariga.io/atlas-go-sdk/atlasexec"
 	"context"
 	"embed"
+	"io/fs"
 )
 
 //go:embed migrations
 var migrationFS embed.FS
 
-func Migrate(dbUrl string) error {
+func Migrate(dbUrl string) (err error) {
+	subFS, err := fs.Sub(migrationFS, "migrations")
+	if err != nil {
+		return err
+	}
+
 	workdir, err := atlasexec.NewWorkingDir(
-		atlasexec.WithMigrations(migrationFS),
+		atlasexec.WithMigrations(subFS),
 	)
 	if err != nil {
 		return err
 	}
+
 	defer func(workdir *atlasexec.WorkingDir) {
-		_ = workdir.Close()
+		err = workdir.Close()
 	}(workdir)
 
 	client, err := atlasexec.NewClient(workdir.Path(), "atlas")
@@ -31,6 +38,5 @@ func Migrate(dbUrl string) error {
 	if err != nil {
 		return err
 	}
-
-	return nil
+	return err
 }
