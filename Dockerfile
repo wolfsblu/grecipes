@@ -2,7 +2,7 @@ FROM docker.io/node:lts-alpine as frontend
 
 WORKDIR /app
 
-COPY app .
+COPY webapp .
 
 RUN --mount=type=cache,target=/app/.npm \
     npm set cache /app/.npm && \
