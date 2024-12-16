@@ -1,11 +1,11 @@
 FROM docker.io/node:lts-alpine as frontend
 
-WORKDIR /app
+WORKDIR /webapp
 
 COPY webapp .
 
-RUN --mount=type=cache,target=/app/.npm \
-    npm set cache /app/.npm && \
+RUN --mount=type=cache,target=/webapp/.npm \
+    npm set cache /webapp/.npm && \
     npm ci && \
     npm run build
 
@@ -14,7 +14,7 @@ FROM docker.io/golang:alpine as backend
 WORKDIR /app
 
 COPY . .
-COPY --from=frontend /app/dist ./app/dist
+COPY --from=frontend /webapp/dist ./webapp/dist
 
 RUN --mount=type=cache,target=/go/pkg/mod go generate && go build
 
