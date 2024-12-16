@@ -1,13 +1,13 @@
 <script lang="ts">
-    import Button from "../lib/components/forms/Button.svelte";
-    import Input from "../lib/components/forms/Input.svelte";
-    import Layout from "../Layout.svelte";
-    import LoginIcon from "../lib/icons/Login.svelte";
-    import Navbar from "../lib/components/navigation/Navbar.svelte";
-    import t from "../lib/i18n/i18n.svelte"
-    import {createRouter} from "../lib/router.svelte";
-    import {createUser} from "../lib/auth/user.svelte";
-    import food from "../assets/images/login.jpg"
+    import Button from "../../lib/components/forms/Button.svelte";
+    import Input from "../../lib/components/forms/Input.svelte";
+    import Layout from "../../Layout.svelte";
+    import LoginIcon from "../../lib/icons/Login.svelte";
+    import Navbar from "../../lib/components/navigation/Navbar.svelte";
+    import t from "../../lib/i18n/i18n.svelte.js"
+    import {createRouter} from "../../lib/router.svelte.js";
+    import {createUser} from "../../lib/auth/user.svelte.js";
+    import food from "../../assets/images/login.jpg"
 
     const router = createRouter()
     const user = createUser()

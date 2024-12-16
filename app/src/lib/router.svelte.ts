@@ -36,19 +36,20 @@ export const createRouter = () => {
         }
     }
 
-    const setPage: (nextPage: string) => Callback = (nextPage) => {
+    const setPage: (importFn: () => Promise<Component>) => Callback = (importFn) => {
         return async (_ctx, _next) => {
-            page = (await import(`../pages/${nextPage}.svelte`)).default
+            page = await importFn()
         };
     }
 
     const registerRoutes = async () => {
-        router("/", setPage("Index"))
-        router("/about", setPage("About"))
-        router("/login", requireGuest, setPage("Login"))
-        router("/register", requireGuest, setPage("Register"))
-        router("/recipes/create", requireLogin, setPage("recipes/Create"))
-        router("*", setPage("errors/404"))
+        router("/", setPage(async () => (await import("../pages/Index.svelte")).default))
+        router("/about", setPage(async () => (await import("../pages/About.svelte")).default))
+        router("/login", requireGuest, setPage(async () => (await import("../pages/auth/Login.svelte")).default))
+        router("/recipes/create", requireLogin, setPage(async () => (await import("../pages/recipes/Create.svelte")).default))
+        router("/register", requireGuest, setPage(async () => (await import("../pages/auth/Register.svelte")).default))
+        router("/reset-password", requireGuest, setPage(async () => (await import("../pages/auth/Reset.svelte")).default))
+        router("*", setPage(async () => (await import("../pages/errors/404.svelte")).default))
 
         router.start()
     }
