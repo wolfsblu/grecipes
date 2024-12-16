@@ -33,6 +33,13 @@ CREATE TABLE users
     created_at    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE password_resets
+(
+    user_id    INTEGER PRIMARY KEY REFERENCES users (id) ON DELETE CASCADE,
+    token      TEXT      NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE user_awards
 (
     user_id    INTEGER   NOT NULL REFERENCES users (id) ON DELETE CASCADE,
