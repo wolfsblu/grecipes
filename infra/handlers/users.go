@@ -75,6 +75,9 @@ func (h *RecipeHandler) ResetPassword(ctx context.Context, req *api.ResetPasswor
 }
 
 func (h *RecipeHandler) UpdatePassword(ctx context.Context, req *api.UpdatePassword) error {
-	// TODO: Implement
-	return nil
+	hashedPassword, err := security.CreateHash(req.Password, security.DefaultHashParams)
+	if err != nil {
+		return err
+	}
+	return h.Recipes.UpdatePasswordByToken(ctx, req.Token, hashedPassword)
 }

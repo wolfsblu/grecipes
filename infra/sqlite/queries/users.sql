@@ -1,3 +1,10 @@
+-- name: GetPasswordResetToken :one
+SELECT sqlc.embed(password_resets), sqlc.embed(users)
+FROM password_resets
+INNER JOIN users ON users.id = password_resets.user_id
+WHERE token = ?
+LIMIT 1;
+
 -- name: GetPasswordResetTokenByUser :one
 SELECT *
 FROM password_resets
@@ -25,3 +32,8 @@ RETURNING *;
 INSERT INTO password_resets (user_id, token)
 VALUES (?, ?)
 RETURNING *;
+
+-- name: UpdatePasswordByUserId :exec
+UPDATE users
+SET password_hash = ?
+WHERE id = ?;
