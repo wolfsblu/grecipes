@@ -5,6 +5,7 @@ import "context"
 type RecipeStore interface {
 	CreateRecipe(ctx context.Context, recipe RecipeDetails) (Recipe, error)
 	CreateUser(ctx context.Context, credentials Credentials) (User, error)
+	CreatePasswordResetToken(ctx context.Context, user User) (PasswordResetToken, error)
 	DeleteRecipe(ctx context.Context, id int64) error
 	GetRecipeById(ctx context.Context, id int64) (Recipe, error)
 	GetRecipesByUser(ctx context.Context, user *User) ([]Recipe, error)

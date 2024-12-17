@@ -1,4 +1,8 @@
-import {fetchProfile as apiFetchProfile, login as apiLogin} from "../api/client";
+import {
+    fetchProfile as apiFetchProfile,
+    login as apiLogin,
+    resetPassword as apiResetPassword
+} from "../api/client";
 
 let profile: User | null = $state(null)
 
@@ -21,11 +25,19 @@ export const createUser = () => {
         }
     }
 
+    const resetPassword = async (email: string) => {
+        const response = await apiResetPassword(email)
+        if (response.error) {
+            throw response.error
+        }
+    }
+
     return {
         get profile() {
             return profile
         },
         fetchProfile,
         login,
+        resetPassword,
     }
 }

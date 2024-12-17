@@ -3,9 +3,11 @@ package sqlite
 import (
 	"database/sql"
 	"fmt"
+	"github.com/wolfsblu/go-chef/infra/env"
 )
 
-func NewSqliteStore(dbPath string) (*Store, error) {
+func NewSqliteStore() (*Store, error) {
+	dbPath := env.MustGet("DB_PATH")
 	query, err := connect(dbPath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to the database: %w", err)

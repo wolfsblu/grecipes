@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/wolfsblu/go-chef/domain"
+	"github.com/wolfsblu/go-chef/domain/security"
 	"io/fs"
 	_ "modernc.org/sqlite"
 )
@@ -54,6 +55,20 @@ func (s *Store) CreateRecipe(ctx context.Context, r domain.RecipeDetails) (recip
 	}
 
 	return result.AsDomainModel(), nil
+}
+
+func (s *Store) CreatePasswordResetToken(ctx context.Context, user domain.User) (token domain.PasswordResetToken, _ error) {
+	result, err := s.db.CreatePasswordResetToken(ctx, CreatePasswordResetTokenParams{
+		UserID: user.ID,
+		Token:  security.GenerateToken(security.DefaultTokenLength),
+	})
+	if err != nil {
+		return token, err
+	}
+
+	token = result.AsDomainModel()
+	token.User = user
+	return token, nil
 }
 
 func (s *Store) CreateUser(ctx context.Context, credentials domain.Credentials) (user domain.User, _ error) {

@@ -1,7 +1,15 @@
 package sqlite
 
-import "github.com/wolfsblu/go-chef/domain"
+import (
+	"github.com/wolfsblu/go-chef/domain"
+)
 
+func (t *PasswordReset) AsDomainModel() domain.PasswordResetToken {
+	return domain.PasswordResetToken{
+		Token:     t.Token,
+		CreatedAt: t.CreatedAt,
+	}
+}
 func (r *Recipe) AsDomainModel() domain.Recipe {
 	return domain.Recipe{
 		ID: r.ID,

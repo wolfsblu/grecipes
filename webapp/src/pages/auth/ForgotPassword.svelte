@@ -12,15 +12,12 @@
     const router = createRouter()
     const user = createUser()
 
-    let credentials: Credentials = $state({
-        email: "",
-        password: "",
-    })
+    let email = $state("")
 
     const handleSubmit = async (e: SubmitEvent) => {
         e.preventDefault()
         try {
-            await user.login(credentials)
+            await user.resetPassword(email)
             router.redirectToNext()
         } catch (e) {
             // TODO: Show error toast
@@ -37,7 +34,7 @@
               title={t("forgot-password.title")}
               subtitle={t("forgot-password.subtitle")}
         >
-            <Input label={t("forgot-password.labels.email")} type="email" bind:value={credentials.email} required={true}/>
+            <Input label={t("forgot-password.labels.email")} type="email" bind:value={email} required={true}/>
             <p class="text-sm">
                 {@html t("forgot-password.help.email", {
                     class: "hover:no-underline hover:text-blue-500 text-blue-600 underline",

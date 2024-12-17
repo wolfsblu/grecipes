@@ -1,5 +1,5 @@
 package domain
 
 type NotificationSender interface {
-	SendPasswordReset(u User) error
+	SendPasswordReset(token PasswordResetToken) error
 }

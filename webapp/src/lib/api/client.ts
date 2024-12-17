@@ -32,3 +32,9 @@ export const login = (credentials: Credentials) => {
         }
     })
 }
+
+export const resetPassword = (email: string) => {
+    return client.POST("/reset-password", {
+        body: {email}
+    })
+}

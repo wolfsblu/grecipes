@@ -16,7 +16,7 @@ func main() {
 	env.Load()
 
 	notifier := smtp.NewSMTPMailer()
-	store, err := sqlite.NewSqliteStore(env.MustGet("DB_PATH"))
+	store, err := sqlite.NewSqliteStore()
 	if err != nil {
 		log.Fatalln("failed to initialize sqlite connection:", err)
 	}

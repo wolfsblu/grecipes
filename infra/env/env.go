@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"slices"
+	"strconv"
 	"strings"
 )
 
@@ -39,6 +40,18 @@ func MustGet(key string) string {
 		log.Fatalf("env variable '%s' is required\n", key)
 	}
 	return value
+}
+
+func MustGetInt(key string) int {
+	value, ok := os.LookupEnv(key)
+	if !ok {
+		log.Fatalf("env variable '%s' is required\n", key)
+	}
+	intValue, err := strconv.Atoi(value)
+	if err != nil {
+		log.Fatalf("env variable '%s' with value '%s' is not a number\n", key, value)
+	}
+	return intValue
 }
 
 func ensureRequiredVariables() {

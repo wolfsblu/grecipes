@@ -8,9 +8,14 @@ LIMIT 1;
 SELECT *
 FROM users
 WHERE email = ?
-    LIMIT 1;
+LIMIT 1;
 
 -- name: CreateUser :one
 INSERT INTO users (email, password_hash)
+VALUES (?, ?)
+RETURNING *;
+
+-- name: CreatePasswordResetToken :one
+INSERT INTO password_resets (user_id, token)
 VALUES (?, ?)
 RETURNING *;

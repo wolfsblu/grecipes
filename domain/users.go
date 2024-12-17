@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/wolfsblu/go-chef/domain/security"
+	"time"
 )
 
 type Credentials struct {
@@ -14,6 +15,12 @@ type Credentials struct {
 type User struct {
 	ID int64
 	Credentials
+}
+
+type PasswordResetToken struct {
+	User      User
+	Token     string
+	CreatedAt time.Time
 }
 
 func (s *RecipeService) GetUserById(ctx context.Context, id int64) (User, error) {
@@ -29,8 +36,16 @@ func (s *RecipeService) RegisterUser(ctx context.Context, credentials Credential
 }
 
 func (s *RecipeService) ResetPasswordByEmail(ctx context.Context, email string) error {
-	// TODO: Implement
-	_, err := s.store.GetUserByEmail(ctx, email)
+	user, err := s.store.GetUserByEmail(ctx, email)
+	// TODO: Extend existing token before creating a new one (there's a unique key on user id)
+	if err != nil {
+		return err
+	}
+	token, err := s.store.CreatePasswordResetToken(ctx, user)
+	if err != nil {
+		return err
+	}
+	err = s.sender.SendPasswordReset(token)
 	if err != nil {
 		return err
 	}
