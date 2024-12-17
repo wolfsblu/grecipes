@@ -32,21 +32,6 @@ func (s *Store) CreateUser(ctx context.Context, credentials domain.Credentials) 
 	return result.AsDomainModel(), nil
 }
 
-func (s *Store) DeletePasswordResetTokenByUser(ctx context.Context, user *domain.User) error {
-	return s.db.DeletePasswordResetTokenByUserId(ctx, user.ID)
-}
-
-func (s *Store) GetPasswordResetToken(ctx context.Context, searchToken string) (token domain.PasswordResetToken, _ error) {
-	result, err := s.db.GetPasswordResetToken(ctx, searchToken)
-	if err != nil {
-		return token, err
-	}
-	token = result.PasswordReset.AsDomainModel()
-	user := result.User.AsDomainModel()
-	token.User = &user
-	return token, nil
-}
-
 func (s *Store) GetPasswordResetTokenByUser(ctx context.Context, user *domain.User) (token domain.PasswordResetToken, _ error) {
 	result, err := s.db.GetPasswordResetTokenByUser(ctx, user.ID)
 	if err != nil {
@@ -71,13 +56,6 @@ func (s *Store) GetUserById(ctx context.Context, id int64) (user domain.User, _ 
 		return user, err
 	}
 	return result.AsDomainModel(), nil
-}
-
-func (s *Store) UpdatePasswordByUser(ctx context.Context, user *domain.User, hashedPassword string) error {
-	return s.db.UpdatePasswordByUserId(ctx, UpdatePasswordByUserIdParams{
-		PasswordHash: hashedPassword,
-		ID:           user.ID,
-	})
 }
 
 func (s *Store) UpdatePasswordByToken(ctx context.Context, searchToken, hashedPassword string) error {
