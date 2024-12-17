@@ -1,11 +1,8 @@
 package smtp
 
 import (
-	"bytes"
-	"fmt"
 	"github.com/wolfsblu/go-chef/domain"
 	"gopkg.in/gomail.v2"
-	"html/template"
 )
 
 type Config struct {
@@ -41,18 +38,4 @@ func (s *Mailer) sendMessage(sender, recipient, subject, body string) error {
 
 	dialer := gomail.NewDialer(s.config.Host, s.config.Port, s.config.User, s.config.Password)
 	return dialer.DialAndSend(msg)
-}
-
-func buildTemplate(path string, data any) (string, error) {
-	t := template.New(path)
-	t, err := t.ParseFS(templateFS, fmt.Sprintf("templates/%s", path))
-	if err != nil {
-		return "", err
-	}
-
-	var tpl bytes.Buffer
-	if err = t.Execute(&tpl, data); err != nil {
-		return "", err
-	}
-	return tpl.String(), nil
 }
