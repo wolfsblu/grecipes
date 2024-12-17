@@ -57,7 +57,7 @@ func (s *Store) CreateRecipe(ctx context.Context, r domain.RecipeDetails) (recip
 	return result.AsDomainModel(), nil
 }
 
-func (s *Store) CreatePasswordResetToken(ctx context.Context, user domain.User) (token domain.PasswordResetToken, _ error) {
+func (s *Store) CreatePasswordResetToken(ctx context.Context, user *domain.User) (token domain.PasswordResetToken, _ error) {
 	result, err := s.db.CreatePasswordResetToken(ctx, CreatePasswordResetTokenParams{
 		UserID: user.ID,
 		Token:  security.GenerateToken(security.DefaultTokenLength),
@@ -84,6 +84,16 @@ func (s *Store) CreateUser(ctx context.Context, credentials domain.Credentials) 
 
 func (s *Store) DeleteRecipe(ctx context.Context, id int64) error {
 	return s.db.DeleteRecipe(ctx, id)
+}
+
+func (s *Store) GetPasswordResetTokenByUser(ctx context.Context, user *domain.User) (token domain.PasswordResetToken, _ error) {
+	result, err := s.db.GetPasswordResetTokenByUser(ctx, user.ID)
+	if err != nil {
+		return token, err
+	}
+	token = result.AsDomainModel()
+	token.User = user
+	return token, nil
 }
 
 func (s *Store) GetRecipeById(ctx context.Context, id int64) (recipe domain.Recipe, _ error) {

@@ -18,7 +18,7 @@ type User struct {
 }
 
 type PasswordResetToken struct {
-	User      User
+	User      *User
 	Token     string
 	CreatedAt time.Time
 }
@@ -37,18 +37,20 @@ func (s *RecipeService) RegisterUser(ctx context.Context, credentials Credential
 
 func (s *RecipeService) ResetPasswordByEmail(ctx context.Context, email string) error {
 	user, err := s.store.GetUserByEmail(ctx, email)
-	// TODO: Extend existing token before creating a new one (there's a unique key on user id)
 	if err != nil {
 		return err
 	}
-	token, err := s.store.CreatePasswordResetToken(ctx, user)
+	token, err := s.store.GetPasswordResetTokenByUser(ctx, &user)
+	if err == nil { // When there already is a reset token we want to do nothing and exit early
+		return nil
+	}
+	token, err = s.store.CreatePasswordResetToken(ctx, &user)
 	if err != nil {
 		return err
 	}
-	err = s.sender.SendPasswordReset(token)
-	if err != nil {
-		return err
-	}
+	go func() {
+		_ = s.sender.SendPasswordReset(token)
+	}()
 	return nil
 }
 

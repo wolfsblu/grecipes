@@ -1,3 +1,9 @@
+-- name: GetPasswordResetTokenByUser :one
+SELECT *
+FROM password_resets
+WHERE user_id = ?
+LIMIT 1;
+
 -- name: GetUser :one
 SELECT *
 FROM users
