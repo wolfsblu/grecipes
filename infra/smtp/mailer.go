@@ -2,11 +2,10 @@ package smtp
 
 import (
 	"bytes"
+	"fmt"
 	"github.com/wolfsblu/go-chef/domain"
 	"gopkg.in/gomail.v2"
 	"html/template"
-	"io/fs"
-	"log"
 )
 
 type Config struct {
@@ -20,10 +19,6 @@ type Mailer struct {
 	config Config
 }
 
-type PasswordResetTemplate struct {
-	ResetLink string
-}
-
 func (s *Mailer) SendPasswordReset(token domain.PasswordResetToken) error {
 	tpl, err := buildTemplate("password-reset.html", PasswordResetTemplate{
 		ResetLink: "https://google.com",
@@ -31,7 +26,6 @@ func (s *Mailer) SendPasswordReset(token domain.PasswordResetToken) error {
 	if err != nil {
 		return err
 	}
-
 	if err = s.sendMessage(s.config.User, token.User.Email, "Password Reset", tpl); err != nil {
 		return err
 	}
@@ -51,15 +45,7 @@ func (s *Mailer) sendMessage(sender, recipient, subject, body string) error {
 
 func buildTemplate(path string, data any) (string, error) {
 	t := template.New(path)
-	subFS, err := fs.Sub(templateFS, "templates")
-	items, _ := fs.ReadDir(subFS, ".")
-	for _, item := range items {
-		log.Println(item)
-	}
-	if err != nil {
-		return "", err
-	}
-	t, err = t.ParseFS(subFS, path)
+	t, err := t.ParseFS(templateFS, fmt.Sprintf("templates/%s", path))
 	if err != nil {
 		return "", err
 	}
@@ -68,6 +54,5 @@ func buildTemplate(path string, data any) (string, error) {
 	if err = t.Execute(&tpl, data); err != nil {
 		return "", err
 	}
-
 	return tpl.String(), nil
 }
