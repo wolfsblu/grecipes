@@ -17,7 +17,7 @@ func (h *RecipeHandler) Login(ctx context.Context, req *api.Credentials) (r *api
 	if err != nil {
 		return nil, err
 	}
-	cookie, err := NewSessionCookie(user.ID)
+	cookie, err := createSessionCookie(user.ID)
 	if err != nil {
 		return nil, &domain.ErrSecurity
 	}
@@ -35,7 +35,7 @@ func (h *RecipeHandler) Login(ctx context.Context, req *api.Credentials) (r *api
 }
 
 func (h *RecipeHandler) Logout(_ context.Context) (*api.LogoutOK, error) {
-	cookie := ExpireSessionCookie()
+	cookie := expireSessionCookie()
 	return &api.LogoutOK{
 		SetCookie: api.OptString{
 			Set:   true,

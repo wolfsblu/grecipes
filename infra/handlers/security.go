@@ -24,7 +24,7 @@ func NewSecurityHandler(service *domain.RecipeService) *SecurityHandler {
 }
 
 func (h *SecurityHandler) HandleCookieAuth(ctx context.Context, _ string, t api.CookieAuth) (context.Context, error) {
-	userId, err := GetUserFromSessionCookie(t.APIKey)
+	userId, err := getUserFromSessionCookie(t.APIKey)
 	if err != nil {
 		return nil, fmt.Errorf("%w: %w", &domain.ErrSecurity, err)
 	}

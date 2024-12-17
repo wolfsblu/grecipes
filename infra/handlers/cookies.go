@@ -9,7 +9,7 @@ import (
 
 const CookieName = "SESSID"
 
-func NewSessionCookie(userId int64) (string, error) {
+func createSessionCookie(userId int64) (string, error) {
 	payload, err := encryptUserId(userId)
 	if err != nil {
 		return "", err
@@ -20,13 +20,13 @@ func NewSessionCookie(userId int64) (string, error) {
 	), nil
 }
 
-func ExpireSessionCookie() string {
+func expireSessionCookie() string {
 	return fmt.Sprintf(
 		"%s=; HttpOnly; Secure; SameSite=strict; Path=/; Max-Age=%d", CookieName, 0,
 	)
 }
 
-func GetUserFromSessionCookie(cookieValue string) (int64, error) {
+func getUserFromSessionCookie(cookieValue string) (int64, error) {
 	return decryptUserId(cookieValue)
 }
 
