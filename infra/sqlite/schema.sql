@@ -30,7 +30,15 @@ CREATE TABLE users
     id            INTEGER PRIMARY KEY,
     email         TEXT      NOT NULL UNIQUE,
     password_hash TEXT      NOT NULL,
+    is_confirmed  BIT       NOT NULL DEFAULT 0,
     created_at    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE user_registrations
+(
+    user_id    INTEGER PRIMARY KEY REFERENCES users (id) ON DELETE CASCADE,
+    token      TEXT      NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE password_resets
