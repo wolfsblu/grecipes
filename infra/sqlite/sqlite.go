@@ -3,6 +3,7 @@ package sqlite
 import (
 	"ariga.io/atlas-go-sdk/atlasexec"
 	"context"
+	"database/sql"
 	"fmt"
 	"github.com/wolfsblu/go-chef/domain"
 	"github.com/wolfsblu/go-chef/domain/security"
@@ -11,6 +12,7 @@ import (
 )
 
 type Store struct {
+	con  *sql.DB
 	db   *Queries
 	path string
 }
@@ -20,7 +22,6 @@ func (s *Store) Migrate() error {
 	if err != nil {
 		return err
 	}
-
 	workdir, err := atlasexec.NewWorkingDir(
 		atlasexec.WithMigrations(subFS),
 	)
@@ -86,6 +87,10 @@ func (s *Store) DeleteRecipe(ctx context.Context, id int64) error {
 	return s.db.DeleteRecipe(ctx, id)
 }
 
+func (s *Store) DeletePasswordResetTokenByUser(ctx context.Context, user *domain.User) error {
+	return s.db.DeletePasswordResetTokenByUserId(ctx, user.ID)
+}
+
 func (s *Store) GetPasswordResetToken(ctx context.Context, searchToken string) (token domain.PasswordResetToken, _ error) {
 	result, err := s.db.GetPasswordResetToken(ctx, searchToken)
 	if err != nil {
@@ -148,4 +153,31 @@ func (s *Store) UpdatePasswordByUser(ctx context.Context, user *domain.User, has
 		PasswordHash: hashedPassword,
 		ID:           user.ID,
 	})
+}
+
+func (s *Store) UpdatePasswordByToken(ctx context.Context, searchToken, hashedPassword string) error {
+	tx, err := s.con.Begin()
+	if err != nil {
+		return err
+	}
+
+	defer func(tx *sql.Tx) {
+		_ = tx.Rollback()
+	}(tx)
+
+	qtx := s.db.WithTx(tx)
+	token, err := qtx.GetPasswordResetToken(ctx, searchToken)
+	if err != nil {
+		return err
+	}
+	if err = qtx.UpdatePasswordByUserId(ctx, UpdatePasswordByUserIdParams{
+		PasswordHash: hashedPassword,
+		ID:           token.User.ID,
+	}); err != nil {
+		return err
+	}
+	if err = qtx.DeletePasswordResetTokenByUserId(ctx, token.User.ID); err != nil {
+		return err
+	}
+	return tx.Commit()
 }

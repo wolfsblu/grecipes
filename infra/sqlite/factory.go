@@ -8,17 +8,17 @@ import (
 
 func NewSqliteStore() (*Store, error) {
 	dbPath := env.MustGet("DB_PATH")
-	query, err := connect(dbPath)
+	con, err := connect(dbPath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to the database: %w", err)
 	}
-	return &Store{db: query, path: dbPath}, nil
+	return &Store{con: con, db: New(con), path: dbPath}, nil
 }
 
-func connect(path string) (*Queries, error) {
+func connect(path string) (*sql.DB, error) {
 	con, err := sql.Open("sqlite", path)
 	if err != nil {
 		return nil, err
 	}
-	return New(con), nil
+	return con, nil
 }

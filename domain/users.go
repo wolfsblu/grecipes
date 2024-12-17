@@ -24,11 +24,7 @@ type PasswordResetToken struct {
 }
 
 func (s *RecipeService) UpdatePasswordByToken(ctx context.Context, searchToken, hashedPassword string) error {
-	token, err := s.store.GetPasswordResetToken(ctx, searchToken)
-	if err != nil {
-		return err
-	}
-	return s.store.UpdatePasswordByUser(ctx, token.User, hashedPassword)
+	return s.store.UpdatePasswordByToken(ctx, searchToken, hashedPassword)
 }
 
 func (s *RecipeService) GetUserById(ctx context.Context, id int64) (User, error) {

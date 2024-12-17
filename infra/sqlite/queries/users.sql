@@ -1,3 +1,8 @@
+-- name: DeletePasswordResetTokenByUserId :exec
+DELETE
+FROM password_resets
+WHERE user_id = ?;
+
 -- name: GetPasswordResetToken :one
 SELECT sqlc.embed(password_resets), sqlc.embed(users)
 FROM password_resets
