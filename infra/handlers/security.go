@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/wolfsblu/go-chef/api"
 	"github.com/wolfsblu/go-chef/domain"
-	"github.com/wolfsblu/go-chef/infra/security"
 )
 
 type contextKey string
@@ -25,7 +24,7 @@ func NewSecurityHandler(service *domain.RecipeService) *SecurityHandler {
 }
 
 func (h *SecurityHandler) HandleCookieAuth(ctx context.Context, _ string, t api.CookieAuth) (context.Context, error) {
-	userId, err := security.GetUserFromSessionCookie(t.APIKey)
+	userId, err := GetUserFromSessionCookie(t.APIKey)
 	if err != nil {
 		return nil, fmt.Errorf("%w: %w", &domain.ErrSecurity, err)
 	}

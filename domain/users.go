@@ -3,7 +3,7 @@ package domain
 import (
 	"context"
 	"fmt"
-	security2 "github.com/wolfsblu/go-chef/infra/security"
+	"github.com/wolfsblu/go-chef/domain/security"
 )
 
 type Credentials struct {
@@ -14,14 +14,6 @@ type Credentials struct {
 type User struct {
 	ID int64
 	Credentials
-}
-
-func (s *RecipeService) GenerateSessionCookie(user User) (string, error) {
-	cookie, err := security2.NewSessionCookie(user.ID)
-	if err != nil {
-		return "", &ErrSecurity
-	}
-	return cookie, nil
 }
 
 func (s *RecipeService) GetUserById(ctx context.Context, id int64) (User, error) {
@@ -46,7 +38,7 @@ func (s *RecipeService) ResetPasswordByEmail(ctx context.Context, email string) 
 }
 
 func (s *RecipeService) VerifyPassword(user User, password string) error {
-	ok, err := security2.ComparePasswordAndHash(password, user.PasswordHash)
+	ok, err := security.ComparePasswordAndHash(password, user.PasswordHash)
 	if err != nil {
 		return fmt.Errorf("%w: %w", &ErrSecurity, err)
 	} else if !ok {
