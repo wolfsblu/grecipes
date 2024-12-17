@@ -20,4 +20,9 @@ export default {
     "register.labels.confirmPassword": "Confirm Password",
     "register.subtitle": "Please provide your new account credentials in the form below. If you already have an account please <a href='{{url}}'>sign in here</a>.",
     "register.title": "Register",
+    "reset-password.actions.submit": "Submit",
+    "reset-password.labels.password": "Password",
+    "reset-password.labels.confirmPassword": "Confirm Password",
+    "reset-password.subtitle": "If you have forgotten your password you may specify a new one below.",
+    "reset-password.title": "Reset Password",
 } satisfies Language

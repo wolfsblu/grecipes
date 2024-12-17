@@ -8,6 +8,14 @@ import (
 	"github.com/wolfsblu/go-chef/domain/security"
 )
 
+func (h *RecipeHandler) GetUserProfile(ctx context.Context) (*api.ReadUser, error) {
+	user := ctx.Value(ctxKeyUser).(*domain.User)
+	return &api.ReadUser{
+		ID:    user.ID,
+		Email: user.Email,
+	}, nil
+}
+
 func (h *RecipeHandler) Login(ctx context.Context, req *api.Credentials) (r *api.AuthenticatedUserHeaders, _ error) {
 	user, err := h.Recipes.GetUserByEmail(ctx, req.Email)
 	if err != nil {
@@ -62,14 +70,11 @@ func (h *RecipeHandler) Register(ctx context.Context, c *api.Credentials) (*api.
 	}, nil
 }
 
-func (h *RecipeHandler) GetUserProfile(ctx context.Context) (*api.ReadUser, error) {
-	user := ctx.Value(ctxKeyUser).(*domain.User)
-	return &api.ReadUser{
-		ID:    user.ID,
-		Email: user.Email,
-	}, nil
-}
-
 func (h *RecipeHandler) ResetPassword(ctx context.Context, req *api.ResetPasswordReq) error {
 	return h.Recipes.ResetPasswordByEmail(ctx, req.Email)
+}
+
+func (h *RecipeHandler) UpdatePassword(ctx context.Context, req *api.UpdatePassword) error {
+	// TODO: Implement
+	return nil
 }

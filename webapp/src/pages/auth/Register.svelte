@@ -38,15 +38,15 @@
               title={t("register.title")}
               subtitle={t("register.subtitle", {url: '/login'})}
         >
-            <div class="gap-3 grid grid-cols-2">
+            <div class="gap-3 grid grid-cols-1 md:grid-cols-2">
                 <Input labelClass="col-span-2" label={t("register.labels.displayName")} type="text"
                        bind:value={credentials.displayName} required={true}/>
                 <Input labelClass="col-span-2" label={t("register.labels.email")} type="email"
                        bind:value={credentials.email}
                        required={true}/>
-                <Input label={t("register.labels.password")} type="password"
+                <Input labelClass="col-span-2 md:col-span-1" label={t("register.labels.password")} type="password"
                        bind:value={credentials.password} required={true}/>
-                <Input label={t("register.labels.confirmPassword")} type="password"
+                <Input labelClass="col-span-2 md:col-span-1" label={t("register.labels.confirmPassword")} type="password"
                        bind:value={credentials.password} required={true}/>
             </div>
         </Form>

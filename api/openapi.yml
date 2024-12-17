@@ -44,6 +44,20 @@ paths:
               $ref: '#/components/headers/SessionCookie'
         default:
           $ref: '#/components/responses/Error'
+  /password:
+    post:
+      tags:
+        - User
+      security: [ ]
+      summary: Modify a user's password
+      operationId: updatePassword
+      requestBody:
+        $ref: '#/components/requestBodies/UpdatePassword'
+      responses:
+        '204':
+          description: Successful operation
+        default:
+          $ref: '#/components/responses/Error'
   /register:
     post:
       tags:
@@ -68,7 +82,7 @@ paths:
       summary: Reset password for an existing user
       operationId: resetPassword
       requestBody:
-        description: The new user credentials
+        description: The user's email
         required: true
         content:
           application/json:
@@ -268,6 +282,20 @@ components:
           type: string
           examples:
             - user@example.com
+    UpdatePassword:
+      type: object
+      required:
+        - password
+        - token
+      properties:
+        password:
+          type: string
+          examples:
+            - my new password
+        token:
+          type: string
+          examples:
+            - abd87ec862b6b8ecc2cf45c170d887d21e835a35f8537ea35ff1af102faa5920
   requestBodies:
     Credentials:
       description: User credentials
@@ -283,6 +311,13 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/WriteRecipe'
+    UpdatePassword:
+      description: The user's new password as well as the required reset token
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UpdatePassword'
   responses:
     Error:
       description: Something went wrong
