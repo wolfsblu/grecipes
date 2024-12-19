@@ -3,14 +3,12 @@ package sqlite
 import (
 	"context"
 	"github.com/wolfsblu/go-chef/domain"
-	"log"
 )
 
 func (s *Store) Begin(ctx context.Context) error {
 	tx, err := s.db.BeginTx(ctx, nil)
 	if err != nil {
-		log.Println("failed to establish transaction:", err)
-		return &domain.ErrPersistence
+		return domain.WrapError(err, "failed to establish transaction", domain.ErrPersistence)
 	}
 	s.tx = tx
 	s.qtx = s.q.WithTx(tx)
@@ -20,8 +18,7 @@ func (s *Store) Begin(ctx context.Context) error {
 func (s *Store) Commit() error {
 	err := s.tx.Commit()
 	if err != nil {
-		log.Println("failed to commit transaction:", err)
-		return &domain.ErrPersistence
+		return domain.WrapError(err, "failed to commit transaction", domain.ErrPersistence)
 	}
 	return nil
 }
@@ -31,10 +28,7 @@ func (s *Store) Rollback() {
 		s.qtx = nil
 		s.tx = nil
 	}()
-	err := s.tx.Rollback()
-	if err != nil {
-		log.Println("failed to rollback transaction:", err)
-	}
+	_ = s.tx.Rollback()
 }
 
 func (s *Store) query() *Queries {

@@ -13,9 +13,9 @@ func (h *RecipeHandler) NewError(_ context.Context, err error) (r *api.ErrorStat
 	var securityError *ogenerrors.SecurityError
 
 	if errors.As(err, &securityError) {
-		serviceError = &domain.ErrSecurity
+		serviceError = domain.ErrSecurity
 	} else if !errors.As(err, &serviceError) {
-		serviceError = &domain.ErrUnhandled
+		serviceError = domain.ErrUnhandled
 	}
 
 	return &api.ErrorStatusCode{

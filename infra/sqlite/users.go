@@ -6,7 +6,6 @@ import (
 	"github.com/go-faster/errors"
 	"github.com/wolfsblu/go-chef/domain"
 	"github.com/wolfsblu/go-chef/domain/security"
-	"log"
 )
 
 func (s *Store) CreatePasswordResetToken(ctx context.Context, user *domain.User) (token domain.PasswordResetToken, _ error) {
@@ -15,8 +14,7 @@ func (s *Store) CreatePasswordResetToken(ctx context.Context, user *domain.User)
 		Token:  security.GenerateToken(security.DefaultTokenLength),
 	})
 	if err != nil {
-		log.Println("failed to create password reset token:", err)
-		return token, &domain.ErrPersistence
+		return token, domain.WrapError(err, "failed to create password reset token", domain.ErrPersistence)
 	}
 
 	token = result.AsDomainModel()
@@ -30,8 +28,7 @@ func (s *Store) CreateUser(ctx context.Context, credentials domain.Credentials) 
 		PasswordHash: credentials.PasswordHash,
 	})
 	if err != nil {
-		log.Println("failed to create user:", err)
-		return user, &domain.ErrPersistence
+		return user, domain.WrapError(err, "failed to create user", domain.ErrPersistence)
 	}
 	return result.AsDomainModel(), nil
 }
@@ -42,8 +39,7 @@ func (s *Store) CreateUserRegistration(ctx context.Context, user *domain.User) (
 		Token:  security.GenerateToken(security.DefaultTokenLength),
 	})
 	if err != nil {
-		log.Println("failed to create user registration:", err)
-		return registration, &domain.ErrPersistence
+		return registration, domain.WrapError(err, "failed to create user registration", domain.ErrPersistence)
 	}
 
 	registration = result.AsDomainModel()
@@ -54,8 +50,7 @@ func (s *Store) CreateUserRegistration(ctx context.Context, user *domain.User) (
 func (s *Store) GetPasswordResetTokenByUser(ctx context.Context, user *domain.User) (token domain.PasswordResetToken, _ error) {
 	result, err := s.query().GetPasswordResetTokenByUser(ctx, user.ID)
 	if err != nil {
-		log.Println("failed to retrieve password reset token:", err)
-		return token, &domain.ErrRetrieval
+		return token, domain.WrapError(err, "failed to retrieve password reset token", domain.ErrRetrieval)
 	}
 	token = result.AsDomainModel()
 	token.User = user
@@ -65,10 +60,9 @@ func (s *Store) GetPasswordResetTokenByUser(ctx context.Context, user *domain.Us
 func (s *Store) GetUserByEmail(ctx context.Context, email string) (user domain.User, _ error) {
 	result, err := s.query().GetUserByEmail(ctx, email)
 	if errors.Is(err, sql.ErrNoRows) {
-		return user, &domain.ErrUserNotFound
+		return user, domain.ErrNotFound
 	} else if err != nil {
-		log.Println("failed to retrieve user by email:", err)
-		return user, &domain.ErrRetrieval
+		return user, domain.WrapError(err, "failed to retrieve user by email", domain.ErrRetrieval)
 	}
 	return result.AsDomainModel(), nil
 }
@@ -76,10 +70,9 @@ func (s *Store) GetUserByEmail(ctx context.Context, email string) (user domain.U
 func (s *Store) GetUserById(ctx context.Context, id int64) (user domain.User, _ error) {
 	result, err := s.query().GetUser(ctx, id)
 	if errors.Is(err, sql.ErrNoRows) {
-		return user, &domain.ErrUserNotFound
+		return user, domain.ErrNotFound
 	} else if err != nil {
-		log.Println("failed to retrieve user by id:", err)
-		return user, &domain.ErrRetrieval
+		return user, domain.WrapError(err, "failed to retrieve user by id", domain.ErrRetrieval)
 	}
 	return result.AsDomainModel(), nil
 }
@@ -93,19 +86,16 @@ func (s *Store) UpdatePasswordByToken(ctx context.Context, searchToken, hashedPa
 
 	token, err := s.query().GetPasswordResetToken(ctx, searchToken)
 	if err != nil {
-		log.Println("failed to retrieve password reset token:", err)
-		return &domain.ErrRetrieval
+		return domain.WrapError(err, "failed to retrieve password reset token", domain.ErrRetrieval)
 	}
 	if err = s.query().UpdatePasswordByUserId(ctx, UpdatePasswordByUserIdParams{
 		PasswordHash: hashedPassword,
 		ID:           token.User.ID,
 	}); err != nil {
-		log.Println("failed to update password:", err)
-		return &domain.ErrPersistence
+		return domain.WrapError(err, "failed to update password", domain.ErrPersistence)
 	}
 	if err = s.query().DeletePasswordResetTokenByUserId(ctx, token.User.ID); err != nil {
-		log.Println("failed to delete password reset token:", err)
-		return &domain.ErrPersistence
+		return domain.WrapError(err, "failed to delete password reset token", domain.ErrPersistence)
 	}
 	return s.Commit()
 }

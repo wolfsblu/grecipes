@@ -50,19 +50,19 @@ func (s *RecipeService) RegisterUser(ctx context.Context, credentials Credential
 	user, err := s.store.GetUserByEmail(ctx, credentials.Email)
 	if err == nil {
 		return nil
-	} else if !errors.Is(err, &ErrUserNotFound) {
-		return err
+	} else if !errors.Is(err, ErrNotFound) {
+		return fmt.Errorf("%w: %w", ErrRegistration, err)
 	}
 	user, err = s.store.CreateUser(ctx, credentials)
 	if err != nil {
-		return err
+		return fmt.Errorf("%w: %w", ErrRegistration, err)
 	}
 	registration, err := s.store.CreateUserRegistration(ctx, &user)
 	if err != nil {
-		return err
+		return fmt.Errorf("%w: %w", ErrRegistration, err)
 	}
 	if err = s.store.Commit(); err != nil {
-		return err
+		return fmt.Errorf("%w: %w", ErrRegistration, err)
 	}
 	go func() {
 		_ = s.sender.SendUserRegistration(registration)

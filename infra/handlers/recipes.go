@@ -58,7 +58,7 @@ func (h *RecipeHandler) GetRecipes(ctx context.Context) ([]api.ReadRecipe, error
 func (h *RecipeHandler) GetRecipeById(ctx context.Context, params api.GetRecipeByIdParams) (*api.ReadRecipe, error) {
 	recipe, err := h.Recipes.GetById(ctx, params.RecipeId)
 	if err != nil {
-		return nil, &domain.ErrRecipeNotFound
+		return nil, domain.ErrNotFound
 	}
 	return &api.ReadRecipe{
 		ID:   recipe.ID,
