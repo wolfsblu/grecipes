@@ -20,7 +20,7 @@
     const handleSubmit = async (e: SubmitEvent) => {
         e.preventDefault()
         try {
-            await user.login(credentials)
+            await user.register(credentials)
             router.redirectToNext()
         } catch (e) {
             // TODO: Show error toast

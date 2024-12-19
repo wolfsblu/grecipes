@@ -17,7 +17,6 @@
     const handleSubmit = async (e: SubmitEvent) => {
         e.preventDefault()
         try {
-            await user.resetPassword(email)
             router.redirectToNext()
         } catch (e) {
             // TODO: Show error toast

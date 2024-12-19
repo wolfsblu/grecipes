@@ -33,6 +33,14 @@ export const login = (credentials: Credentials) => {
     })
 }
 
+export const register = (credentials: Credentials) => {
+    return client.POST("/register", {
+        body: {
+            ...credentials
+        }
+    })
+}
+
 export const resetPassword = (email: string) => {
     return client.POST("/reset-password", {
         body: {email}

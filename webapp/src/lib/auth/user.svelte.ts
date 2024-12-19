@@ -1,6 +1,7 @@
 import {
     fetchProfile as apiFetchProfile,
     login as apiLogin,
+    register as apiRegister,
     resetPassword as apiResetPassword
 } from "../api/client";
 
@@ -25,6 +26,13 @@ export const createUser = () => {
         }
     }
 
+    const register = async (credentials: Credentials) => {
+        const response = await apiRegister(credentials)
+        if (response.error) {
+            throw response.error
+        }
+    }
+
     const resetPassword = async (email: string) => {
         const response = await apiResetPassword(email)
         if (response.error) {
@@ -38,6 +46,7 @@ export const createUser = () => {
         },
         fetchProfile,
         login,
+        register,
         resetPassword,
     }
 }
