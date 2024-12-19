@@ -33,7 +33,6 @@ paths:
     post:
       tags:
         - User
-      security: []
       summary: Logout a user
       operationId: logout
       responses:
