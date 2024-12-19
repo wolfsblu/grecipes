@@ -12,7 +12,7 @@ func NewSqliteStore() (*Store, error) {
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to the database: %w", err)
 	}
-	return &Store{con: con, db: New(con), path: dbPath}, nil
+	return &Store{db: con, q: New(con), path: dbPath}, nil
 }
 
 func connect(path string) (*sql.DB, error) {

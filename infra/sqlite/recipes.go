@@ -8,9 +8,9 @@ import (
 )
 
 type Store struct {
-	con  *sql.DB
-	db   *Queries
+	db   *sql.DB
 	path string
+	q    *Queries
 	qtx  *Queries
 	tx   *sql.Tx
 }
