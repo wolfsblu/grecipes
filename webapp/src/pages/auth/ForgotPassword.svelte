@@ -26,7 +26,7 @@
 </script>
 
 <Layout Header={Navbar}>
-    <div class="flex flex-col flex-wrap md:h-full items-center justify-center">
+    <div class="bg-gray-50 flex flex-col flex-wrap md:h-full items-center justify-center">
         <Form imageSrc={food}
               submitIcon={SubmitIcon}
               submitLabel={t("forgot-password.actions.submit")}
@@ -34,13 +34,8 @@
               title={t("forgot-password.title")}
               subtitle={t("forgot-password.subtitle")}
         >
-            <Input label={t("forgot-password.labels.email")} type="email" bind:value={email} required={true}/>
-            <p class="text-sm">
-                {@html t("forgot-password.help.email", {
-                    class: "hover:no-underline hover:text-blue-500 text-blue-600 underline",
-                    url: "/"
-                })}
-            </p>
+            <Input label={t("forgot-password.labels.email")} type="email" bind:value={email} required={true}
+                   hint={t("forgot-password.help.email", {url: "/"})}/>
         </Form>
     </div>
 </Layout>

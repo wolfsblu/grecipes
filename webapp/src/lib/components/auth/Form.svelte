@@ -15,7 +15,7 @@
     let {children, imageSrc, title, submitIcon, submitLabel, subtitle, onSubmit}: Props = $props()
 </script>
 
-<div class="lg:grid grid-cols-[1fr_2fr] md:shadow-lg md:w-2/3 lg:w-1/2">
+<div class="bg-white lg:grid grid-cols-[1fr_2fr] md:shadow-lg md:w-1/3">
     <div class="bg-center bg-cover rounded-l-md"
          style="background-image: url({imageSrc})">
     </div>
@@ -23,7 +23,7 @@
           onsubmit="{onSubmit}">
         <div class="p-6">
             <h1 class="font-light mb-3 text-3xl">{title}</h1>
-            <p class="mb-3">
+            <p class="mb-3 text-sm">
                 {@html subtitle}
             </p>
             {@render children()}

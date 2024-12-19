@@ -26,7 +26,7 @@
 </script>
 
 <Layout Header={Navbar}>
-    <div class="flex flex-col flex-wrap md:h-full items-center justify-center">
+    <div class="bg-gray-50 flex flex-col flex-wrap md:h-full items-center justify-center">
         <Form imageSrc={food}
               submitIcon={SubmitIcon}
               submitLabel={t("reset-password.actions.submit")}

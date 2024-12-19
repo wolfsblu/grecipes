@@ -29,7 +29,7 @@
 </script>
 
 <Layout Header={Navbar}>
-    <div class="flex flex-col flex-wrap md:h-full items-center justify-center">
+    <div class="bg-gray-50 flex flex-col flex-wrap md:h-full items-center justify-center">
         <Form imageSrc={food}
               submitIcon={LoginIcon}
               submitLabel={t("login.actions.submit")}
@@ -40,12 +40,8 @@
             <Input inputClass="mb-3" label={t("login.labels.email")} type="email" bind:value={credentials.email}
                    required={true}/>
             <Input label={t("login.labels.password")} type="password"
-                   bind:value={credentials.password} required={true}/>
-            <p class="text-sm">
-                {@html t("login.help.resetPassword", {
-                    url: "/forgot-password",
-                })}
-            </p>
+                   bind:value={credentials.password} required={true}
+                   hint={t("login.help.resetPassword", {url: "/forgot-password"})}/>
         </Form>
     </div>
 </Layout>

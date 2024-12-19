@@ -17,7 +17,6 @@ export default {
     "register.labels.displayName": "Display Name",
     "register.labels.email": "Email",
     "register.labels.password": "Password",
-    "register.labels.confirmPassword": "Confirm Password",
     "register.subtitle": "Please provide your new account credentials in the form below. If you already have an account please <a href='{{url}}'>sign in here</a>.",
     "register.title": "Register",
     "reset-password.actions.submit": "Submit",

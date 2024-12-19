@@ -2,6 +2,7 @@
     import type {HTMLInputTypeAttribute} from "svelte/elements";
 
     interface Props {
+        hint?: string
         inputClass?: string
         label?: string
         labelClass?: string
@@ -10,7 +11,7 @@
         value: T
     }
 
-    let {inputClass, label, labelClass, value = $bindable(), ...rest}: Props = $props()
+    let {hint, inputClass, label, labelClass, value = $bindable(), ...rest}: Props = $props()
     let fields = {...rest}
 </script>
 
@@ -20,3 +21,7 @@
            {...fields}
            bind:value={value}>
 </label>
+
+{#if hint}
+    <p class="text-xs">{@html hint}</p>
+{/if}

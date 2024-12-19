@@ -13,7 +13,6 @@
     const user = createUser()
 
     let credentials = $state({
-        displayName: "",
         email: "",
         password: "",
     })
@@ -30,7 +29,7 @@
 </script>
 
 <Layout Header={Navbar}>
-    <div class="flex flex-col flex-wrap md:h-full items-center justify-center">
+    <div class="bg-gray-50 flex flex-col flex-wrap md:h-full items-center justify-center">
         <Form imageSrc={food}
               submitIcon={SubmitIcon}
               submitLabel={t("register.actions.submit")}
@@ -38,15 +37,11 @@
               title={t("register.title")}
               subtitle={t("register.subtitle", {url: '/login'})}
         >
-            <div class="gap-3 grid grid-cols-1 md:grid-cols-2">
-                <Input labelClass="col-span-2" label={t("register.labels.displayName")} type="text"
-                       bind:value={credentials.displayName} required={true}/>
-                <Input labelClass="col-span-2" label={t("register.labels.email")} type="email"
+            <div class="gap-3 grid grid-cols-1">
+                <Input label={t("register.labels.email")} type="email"
                        bind:value={credentials.email}
                        required={true}/>
-                <Input labelClass="col-span-2 md:col-span-1" label={t("register.labels.password")} type="password"
-                       bind:value={credentials.password} required={true}/>
-                <Input labelClass="col-span-2 md:col-span-1" label={t("register.labels.confirmPassword")} type="password"
+                <Input label={t("register.labels.password")} type="password"
                        bind:value={credentials.password} required={true}/>
             </div>
         </Form>
