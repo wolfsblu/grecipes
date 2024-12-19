@@ -44,20 +44,6 @@ paths:
               $ref: '#/components/headers/SessionCookie'
         default:
           $ref: '#/components/responses/Error'
-  /password:
-    post:
-      tags:
-        - User
-      security: [ ]
-      summary: Modify a user's password
-      operationId: updatePassword
-      requestBody:
-        $ref: '#/components/requestBodies/UpdatePassword'
-      responses:
-        '204':
-          description: Successful operation
-        default:
-          $ref: '#/components/responses/Error'
   /register:
     post:
       tags:
@@ -73,12 +59,40 @@ paths:
           description: Registration was successful
         default:
           $ref: '#/components/responses/Error'
-  /reset-password:
+  /user/confirm:
+    post:
+      tags:
+        - User
+      security: [ ]
+      summary: Confirm a user account after successful registration
+      operationId: confirmUser
+      requestBody:
+        $ref: '#/components/requestBodies/ConfirmUser'
+      responses:
+        '204':
+          description: Successful operation
+        default:
+          $ref: '#/components/responses/Error'
+  /user/password:
+    post:
+      tags:
+        - User
+      security: [ ]
+      summary: Modify a user's password based on a reset token
+      operationId: updatePassword
+      requestBody:
+        $ref: '#/components/requestBodies/UpdatePassword'
+      responses:
+        '204':
+          description: Successful operation
+        default:
+          $ref: '#/components/responses/Error'
+  /user/password/reset:
     post:
       tags:
         - User
       security: []
-      summary: Reset password for an existing user
+      summary: Reset password for an existing user by email
       operationId: resetPassword
       requestBody:
         description: The user's email
@@ -97,7 +111,7 @@ paths:
           description: Successful operation
         default:
           $ref: '#/components/responses/Error'
-  /user/profile/:
+  /user/profile:
     get:
       tags:
         - User
@@ -281,20 +295,26 @@ components:
           type: string
           examples:
             - user@example.com
-    UpdatePassword:
+    Token:
       type: object
       required:
-        - password
         - token
       properties:
-        password:
-          type: string
-          examples:
-            - my new password
         token:
           type: string
           examples:
             - abd87ec862b6b8ecc2cf45c170d887d21e835a35f8537ea35ff1af102faa5920
+    UpdatePassword:
+      allOf:
+        - $ref: '#/components/schemas/Token'
+        - type: object
+          required:
+            - password
+          properties:
+            password:
+              type: string
+              examples:
+                - my new password
   requestBodies:
     Credentials:
       description: User credentials
@@ -317,6 +337,13 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/UpdatePassword'
+    ConfirmUser:
+      description: The user's new password as well as the required reset token
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Token'
   responses:
     Error:
       description: Something went wrong

@@ -8,6 +8,10 @@ import (
 	"github.com/wolfsblu/go-chef/domain/security"
 )
 
+func (h *RecipeHandler) ConfirmUser(_ context.Context, _ *api.Token) error {
+	return nil
+}
+
 func (h *RecipeHandler) GetUserProfile(ctx context.Context) (*api.ReadUser, error) {
 	user := ctx.Value(ctxKeyUser).(*domain.User)
 	return &api.ReadUser{
