@@ -50,8 +50,7 @@ func (s *RecipeService) RegisterUser(ctx context.Context, credentials Credential
 	user, err := s.store.GetUserByEmail(ctx, credentials.Email)
 	if err == nil {
 		return nil
-	}
-	if !errors.Is(err, &ErrUserNotFound) {
+	} else if !errors.Is(err, &ErrUserNotFound) {
 		return err
 	}
 	user, err = s.store.CreateUser(ctx, credentials)
