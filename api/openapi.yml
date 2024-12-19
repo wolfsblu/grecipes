@@ -69,9 +69,8 @@ paths:
         description: The new user credentials
         $ref: '#/components/requestBodies/Credentials'
       responses:
-        '200':
-          description: Successful operation
-          $ref: '#/components/responses/User'
+        '204':
+          description: Registration was successful
         default:
           $ref: '#/components/responses/Error'
   /reset-password:

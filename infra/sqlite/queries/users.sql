@@ -1,3 +1,18 @@
+-- name: CreatePasswordResetToken :one
+INSERT INTO password_resets (user_id, token)
+VALUES (?, ?)
+RETURNING *;
+
+-- name: CreateUser :one
+INSERT INTO users (email, password_hash)
+VALUES (?, ?)
+RETURNING *;
+
+-- name: CreateUserRegistration :one
+INSERT INTO user_registrations (user_id, token)
+VALUES (?, ?)
+RETURNING *;
+
 -- name: DeletePasswordResetTokenByUserId :exec
 DELETE
 FROM password_resets
@@ -6,7 +21,7 @@ WHERE user_id = ?;
 -- name: GetPasswordResetToken :one
 SELECT sqlc.embed(password_resets), sqlc.embed(users)
 FROM password_resets
-INNER JOIN users ON users.id = password_resets.user_id
+         INNER JOIN users ON users.id = password_resets.user_id
 WHERE token = ?
 LIMIT 1;
 
@@ -27,16 +42,6 @@ SELECT *
 FROM users
 WHERE email = ?
 LIMIT 1;
-
--- name: CreateUser :one
-INSERT INTO users (email, password_hash)
-VALUES (?, ?)
-RETURNING *;
-
--- name: CreatePasswordResetToken :one
-INSERT INTO password_resets (user_id, token)
-VALUES (?, ?)
-RETURNING *;
 
 -- name: UpdatePasswordByUserId :exec
 UPDATE users

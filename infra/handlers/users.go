@@ -52,22 +52,19 @@ func (h *RecipeHandler) Logout(_ context.Context) (*api.LogoutOK, error) {
 	}, nil
 }
 
-func (h *RecipeHandler) Register(ctx context.Context, c *api.Credentials) (*api.ReadUser, error) {
+func (h *RecipeHandler) Register(ctx context.Context, c *api.Credentials) error {
 	hash, err := security.CreateHash(c.Password, security.DefaultHashParams)
 	if err != nil {
-		return nil, fmt.Errorf("%w: %w", &domain.ErrSecurity, err)
+		return fmt.Errorf("%w: %w", &domain.ErrSecurity, err)
 	}
-	user, err := h.Recipes.RegisterUser(ctx, domain.Credentials{
+	err = h.Recipes.RegisterUser(ctx, domain.Credentials{
 		Email:        c.Email,
 		PasswordHash: hash,
 	})
 	if err != nil {
-		return nil, fmt.Errorf("%w: %w", &domain.ErrRegistration, err)
+		return fmt.Errorf("%w: %w", &domain.ErrRegistration, err)
 	}
-	return &api.ReadUser{
-		ID:    user.ID,
-		Email: user.Email,
-	}, nil
+	return nil
 }
 
 func (h *RecipeHandler) ResetPassword(ctx context.Context, req *api.ResetPasswordReq) error {

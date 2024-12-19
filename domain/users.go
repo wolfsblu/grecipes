@@ -23,6 +23,12 @@ type PasswordResetToken struct {
 	CreatedAt time.Time
 }
 
+type UserRegistration struct {
+	User      *User
+	Token     string
+	CreatedAt time.Time
+}
+
 func (s *RecipeService) UpdatePasswordByToken(ctx context.Context, searchToken, hashedPassword string) error {
 	return s.store.UpdatePasswordByToken(ctx, searchToken, hashedPassword)
 }
@@ -35,8 +41,30 @@ func (s *RecipeService) GetUserByEmail(ctx context.Context, email string) (User,
 	return s.store.GetUserByEmail(ctx, email)
 }
 
-func (s *RecipeService) RegisterUser(ctx context.Context, credentials Credentials) (User, error) {
-	return s.store.CreateUser(ctx, credentials)
+func (s *RecipeService) RegisterUser(ctx context.Context, credentials Credentials) error {
+	if err := s.store.Begin(ctx); err != nil {
+		return err
+	}
+	defer s.store.Rollback()
+	user, err := s.store.GetUserByEmail(ctx, credentials.Email)
+	if err == nil {
+		return nil
+	}
+	user, err = s.store.CreateUser(ctx, credentials)
+	if err != nil {
+		return err
+	}
+	registration, err := s.store.CreateUserRegistration(ctx, &user)
+	if err != nil {
+		return err
+	}
+	if err = s.store.Commit(); err != nil {
+		return err
+	}
+	go func() {
+		_ = s.sender.SendUserRegistration(registration)
+	}()
+	return nil
 }
 
 func (s *RecipeService) ResetPasswordByEmail(ctx context.Context, email string) error {

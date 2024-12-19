@@ -10,6 +10,10 @@ type PasswordResetTemplate struct {
 	ResetLink string
 }
 
+type UserRegistrationTemplate struct {
+	ConfirmLink string
+}
+
 func buildTemplate(path string, data any) (string, error) {
 	t := template.New(path)
 	t, err := t.ParseFS(templateFS, fmt.Sprintf("templates/%s", path))

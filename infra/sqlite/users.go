@@ -2,13 +2,12 @@ package sqlite
 
 import (
 	"context"
-	"database/sql"
 	"github.com/wolfsblu/go-chef/domain"
 	"github.com/wolfsblu/go-chef/domain/security"
 )
 
 func (s *Store) CreatePasswordResetToken(ctx context.Context, user *domain.User) (token domain.PasswordResetToken, _ error) {
-	result, err := s.db.CreatePasswordResetToken(ctx, CreatePasswordResetTokenParams{
+	result, err := s.query().CreatePasswordResetToken(ctx, CreatePasswordResetTokenParams{
 		UserID: user.ID,
 		Token:  security.GenerateToken(security.DefaultTokenLength),
 	})
@@ -22,7 +21,7 @@ func (s *Store) CreatePasswordResetToken(ctx context.Context, user *domain.User)
 }
 
 func (s *Store) CreateUser(ctx context.Context, credentials domain.Credentials) (user domain.User, _ error) {
-	result, err := s.db.CreateUser(ctx, CreateUserParams{
+	result, err := s.query().CreateUser(ctx, CreateUserParams{
 		Email:        credentials.Email,
 		PasswordHash: credentials.PasswordHash,
 	})
@@ -32,8 +31,22 @@ func (s *Store) CreateUser(ctx context.Context, credentials domain.Credentials) 
 	return result.AsDomainModel(), nil
 }
 
+func (s *Store) CreateUserRegistration(ctx context.Context, user *domain.User) (registration domain.UserRegistration, _ error) {
+	result, err := s.query().CreateUserRegistration(ctx, CreateUserRegistrationParams{
+		UserID: user.ID,
+		Token:  security.GenerateToken(security.DefaultTokenLength),
+	})
+	if err != nil {
+		return registration, err
+	}
+
+	registration = result.AsDomainModel()
+	registration.User = user
+	return registration, nil
+}
+
 func (s *Store) GetPasswordResetTokenByUser(ctx context.Context, user *domain.User) (token domain.PasswordResetToken, _ error) {
-	result, err := s.db.GetPasswordResetTokenByUser(ctx, user.ID)
+	result, err := s.query().GetPasswordResetTokenByUser(ctx, user.ID)
 	if err != nil {
 		return token, err
 	}
@@ -43,7 +56,7 @@ func (s *Store) GetPasswordResetTokenByUser(ctx context.Context, user *domain.Us
 }
 
 func (s *Store) GetUserByEmail(ctx context.Context, email string) (user domain.User, _ error) {
-	result, err := s.db.GetUserByEmail(ctx, email)
+	result, err := s.query().GetUserByEmail(ctx, email)
 	if err != nil {
 		return user, err
 	}
@@ -51,7 +64,7 @@ func (s *Store) GetUserByEmail(ctx context.Context, email string) (user domain.U
 }
 
 func (s *Store) GetUserById(ctx context.Context, id int64) (user domain.User, _ error) {
-	result, err := s.db.GetUser(ctx, id)
+	result, err := s.query().GetUser(ctx, id)
 	if err != nil {
 		return user, err
 	}
@@ -59,28 +72,24 @@ func (s *Store) GetUserById(ctx context.Context, id int64) (user domain.User, _ 
 }
 
 func (s *Store) UpdatePasswordByToken(ctx context.Context, searchToken, hashedPassword string) error {
-	tx, err := s.con.Begin()
+	err := s.Begin(ctx)
 	if err != nil {
 		return err
 	}
+	defer s.Rollback()
 
-	defer func(tx *sql.Tx) {
-		_ = tx.Rollback()
-	}(tx)
-
-	qtx := s.db.WithTx(tx)
-	token, err := qtx.GetPasswordResetToken(ctx, searchToken)
+	token, err := s.query().GetPasswordResetToken(ctx, searchToken)
 	if err != nil {
 		return err
 	}
-	if err = qtx.UpdatePasswordByUserId(ctx, UpdatePasswordByUserIdParams{
+	if err = s.query().UpdatePasswordByUserId(ctx, UpdatePasswordByUserIdParams{
 		PasswordHash: hashedPassword,
 		ID:           token.User.ID,
 	}); err != nil {
 		return err
 	}
-	if err = qtx.DeletePasswordResetTokenByUserId(ctx, token.User.ID); err != nil {
+	if err = s.query().DeletePasswordResetTokenByUserId(ctx, token.User.ID); err != nil {
 		return err
 	}
-	return tx.Commit()
+	return s.Commit()
 }

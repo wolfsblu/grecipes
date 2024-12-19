@@ -31,3 +31,10 @@ func (r *User) AsDomainModel() domain.User {
 		},
 	}
 }
+
+func (r *UserRegistration) AsDomainModel() domain.UserRegistration {
+	return domain.UserRegistration{
+		Token:     r.Token,
+		CreatedAt: r.CreatedAt,
+	}
+}

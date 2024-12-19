@@ -28,6 +28,18 @@ func (s *Mailer) SendPasswordReset(token domain.PasswordResetToken) error {
 	}
 	return nil
 }
+func (s *Mailer) SendUserRegistration(registration domain.UserRegistration) error {
+	tpl, err := buildTemplate("user-registration.html", UserRegistrationTemplate{
+		ConfirmLink: "https://google.com",
+	})
+	if err != nil {
+		return err
+	}
+	if err = s.sendMessage(s.config.User, registration.User.Email, "Registration", tpl); err != nil {
+		return err
+	}
+	return nil
+}
 
 func (s *Mailer) sendMessage(sender, recipient, subject, body string) error {
 	msg := gomail.NewMessage()
