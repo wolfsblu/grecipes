@@ -13,7 +13,8 @@ func (e *RecipeServiceError) Error() string {
 var (
 	ErrUnhandled          = RecipeServiceError{HttpStatusCode: 500, Code: 1, Message: "internal server error"}
 	ErrRecipeNotFound     = RecipeServiceError{HttpStatusCode: 404, Code: 2, Message: "recipe not found"}
-	ErrSecurity           = RecipeServiceError{HttpStatusCode: 403, Code: 3, Message: "authentication required"}
-	ErrInvalidCredentials = RecipeServiceError{HttpStatusCode: 403, Code: 4, Message: "invalid credentials"}
-	ErrRegistration       = RecipeServiceError{HttpStatusCode: 422, Code: 5, Message: "failed to register user"}
+	ErrUserNotFound       = RecipeServiceError{HttpStatusCode: 404, Code: 3, Message: "user not found"}
+	ErrSecurity           = RecipeServiceError{HttpStatusCode: 403, Code: 4, Message: "authentication required"}
+	ErrInvalidCredentials = RecipeServiceError{HttpStatusCode: 403, Code: 5, Message: "invalid credentials"}
+	ErrRegistration       = RecipeServiceError{HttpStatusCode: 422, Code: 6, Message: "failed to register user"}
 )

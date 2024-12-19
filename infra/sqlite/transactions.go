@@ -1,6 +1,8 @@
 package sqlite
 
-import "context"
+import (
+	"context"
+)
 
 func (s *Store) Begin(ctx context.Context) error {
 	tx, err := s.db.BeginTx(ctx, nil)
@@ -13,10 +15,6 @@ func (s *Store) Begin(ctx context.Context) error {
 }
 
 func (s *Store) Commit() error {
-	defer func() {
-		s.qtx = nil
-		s.tx = nil
-	}()
 	return s.tx.Commit()
 }
 

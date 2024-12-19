@@ -2,6 +2,7 @@ package sqlite
 
 import (
 	"context"
+	"fmt"
 	"github.com/wolfsblu/go-chef/domain"
 	"github.com/wolfsblu/go-chef/domain/security"
 )
@@ -58,7 +59,7 @@ func (s *Store) GetPasswordResetTokenByUser(ctx context.Context, user *domain.Us
 func (s *Store) GetUserByEmail(ctx context.Context, email string) (user domain.User, _ error) {
 	result, err := s.query().GetUserByEmail(ctx, email)
 	if err != nil {
-		return user, err
+		return user, fmt.Errorf("%w: %w", &domain.ErrUserNotFound, err)
 	}
 	return result.AsDomainModel(), nil
 }
