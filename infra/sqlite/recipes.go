@@ -2,18 +2,9 @@ package sqlite
 
 import (
 	"context"
-	"database/sql"
 	"github.com/wolfsblu/go-chef/domain"
 	_ "modernc.org/sqlite"
 )
-
-type Store struct {
-	db   *sql.DB
-	path string
-	q    *Queries
-	qtx  *Queries
-	tx   *sql.Tx
-}
 
 func (s *Store) CreateRecipe(ctx context.Context, r domain.RecipeDetails) (recipe domain.Recipe, _ error) {
 	payload := CreateRecipeParams{

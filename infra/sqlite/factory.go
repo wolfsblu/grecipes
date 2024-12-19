@@ -6,6 +6,14 @@ import (
 	"github.com/wolfsblu/go-chef/infra/env"
 )
 
+type Store struct {
+	db   *sql.DB
+	path string
+	q    *Queries
+	qtx  *Queries
+	tx   *sql.Tx
+}
+
 func NewSqliteStore() (*Store, error) {
 	dbPath := env.MustGet("DB_PATH")
 	con, err := connect(dbPath)
