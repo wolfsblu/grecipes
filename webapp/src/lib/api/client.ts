@@ -7,7 +7,7 @@ const client = createClient<paths>({
 })
 
 export const fetchProfile = async () => {
-    return client.GET("/user/profile/")
+    return client.GET("/user/profile")
 }
 
 export const fetchRecipes = async () => {
@@ -42,7 +42,7 @@ export const register = (credentials: Credentials) => {
 }
 
 export const resetPassword = (email: string) => {
-    return client.POST("/reset-password", {
+    return client.POST("/user/password/reset", {
         body: {email}
     })
 }

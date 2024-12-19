@@ -55,7 +55,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/reset-password": {
+    "/user/confirm": {
         parameters: {
             query?: never;
             header?: never;
@@ -64,7 +64,41 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Reset password for an existing user */
+        /** Confirm a user account after successful registration */
+        post: operations["confirmUser"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/user/password": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Modify a user's password based on a reset token */
+        post: operations["updatePassword"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/user/password/reset": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Reset password for an existing user by email */
         post: operations["resetPassword"];
         delete?: never;
         options?: never;
@@ -72,7 +106,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/user/profile/": {
+    "/user/profile": {
         parameters: {
             query?: never;
             header?: never;
@@ -159,6 +193,12 @@ export interface components {
             id: number;
             email: string;
         };
+        Token: {
+            token: string;
+        };
+        UpdatePassword: components["schemas"]["Token"] & {
+            password: string;
+        };
     };
     responses: {
         /** @description Something went wrong */
@@ -222,6 +262,18 @@ export interface components {
                 "application/json": components["schemas"]["WriteRecipe"];
             };
         };
+        /** @description The user's new password as well as the required reset token */
+        UpdatePassword: {
+            content: {
+                "application/json": components["schemas"]["UpdatePassword"];
+            };
+        };
+        /** @description The user's new password as well as the required reset token */
+        ConfirmUser: {
+            content: {
+                "application/json": components["schemas"]["Token"];
+            };
+        };
     };
     headers: {
         /** @description Sets the session for the logged in user */
@@ -276,8 +328,51 @@ export interface operations {
         /** @description The new user credentials */
         requestBody: components["requestBodies"]["Credentials"];
         responses: {
+            /** @description Registration was successful */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            default: components["responses"]["Error"];
+        };
+    };
+    confirmUser: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: components["requestBodies"]["ConfirmUser"];
+        responses: {
             /** @description Successful operation */
-            200: components["responses"]["User"];
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            default: components["responses"]["Error"];
+        };
+    };
+    updatePassword: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: components["requestBodies"]["UpdatePassword"];
+        responses: {
+            /** @description Successful operation */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
             default: components["responses"]["Error"];
         };
     };
@@ -288,7 +383,7 @@ export interface operations {
             path?: never;
             cookie?: never;
         };
-        /** @description The new user credentials */
+        /** @description The user's email */
         requestBody: {
             content: {
                 "application/json": {
